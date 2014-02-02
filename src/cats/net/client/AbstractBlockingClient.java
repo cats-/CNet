@@ -50,7 +50,7 @@ public abstract class AbstractBlockingClient extends AbstractClient{
         return socket.isConnected();
     }
 
-    public boolean send0(final Data data) throws Exception{
+    boolean send0(final Data data) throws Exception{
         return data != null && data.writeTo(out);
     }
 
