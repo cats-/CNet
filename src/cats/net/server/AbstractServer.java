@@ -2,6 +2,7 @@ package cats.net.server;
 
 import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.connection.spot.event.AbstractConnectionSpotListener;
+import cats.net.core.data.Data;
 import cats.net.core.data.handler.AbstractDataHandler;
 import cats.net.server.event.ServerListener;
 import cats.net.server.handler.ServerDataHandler;
@@ -46,6 +47,14 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
     }
 
     abstract boolean disconnect(final ActiveClientConnection connection);
+
+    public void sendToAll(final Data data){
+        getConnected().forEach(c -> c.send(data));
+    }
+
+    public void sendToAllExcept(final Data data, final ActiveClientConnection... exceptions){
+        getFilteredConnections(exceptions).forEach(c -> c.send(data));
+    }
 
     public List<ActiveClientConnection> getFilteredConnections(final ActiveClientConnection... clientConnections){
         final List<ActiveClientConnection> connections = Arrays.asList(clientConnections);
