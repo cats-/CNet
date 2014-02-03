@@ -6,7 +6,10 @@ import cats.net.core.data.handler.AbstractDataHandler;
 import cats.net.server.event.ServerListener;
 import cats.net.server.handler.ServerDataHandler;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServer> {
 
@@ -43,6 +46,11 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
     }
 
     abstract boolean disconnect(final ActiveClientConnection connection);
+
+    public List<ActiveClientConnection> getFilteredConnections(final ActiveClientConnection... clientConnections){
+        final List<ActiveClientConnection> connections = Arrays.asList(clientConnections);
+        return getConnected().stream().filter(c -> !connections.contains(c)).collect(Collectors.toList());
+    }
 
     public abstract Collection<ActiveClientConnection> getConnected();
 }

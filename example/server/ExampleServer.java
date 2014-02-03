@@ -28,7 +28,7 @@ public class ExampleServer extends AbstractBlockingServer implements ServerListe
         connection.attach(user);
         connection.send(new Data(1).put("name", "Server").put("msg", String.format("Welcome, %s", user.name)));
         final Data msg = new Data(1).put("name", "Server").put("msg", String.format("%s has just joined", user.name));
-        server.getConnected().stream().filter(c -> !c.equals(connection)).forEach(c -> c.send(msg));
+        server.getFilteredConnections(connection).forEach(c -> c.send(msg));
     }
 
     public void onLeave(final ExampleServer server, final ActiveClientConnection connection){
