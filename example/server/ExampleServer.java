@@ -28,14 +28,14 @@ public class ExampleServer extends AbstractBlockingServer implements ServerListe
         connection.attach(user);
         connection.send(new Data(1).put("name", "Server").put("msg", String.format("Welcome, %s", user.name)));
         final Data msg = new Data(1).put("name", "Server").put("msg", String.format("%s has just joined", user.name));
-        server.getFilteredConnections(connection).forEach(c -> c.send(msg));
+        server.sendToAllExcept(msg, connection);
     }
 
     public void onLeave(final ExampleServer server, final ActiveClientConnection connection){
         final User user = connection.attachment();
         connection.attach(null);
         final Data msg = new Data(1).put("name", "Server").put("msg", String.format("%s has just left", user.name));
-        server.getConnected().forEach(c -> c.send(msg));
+        server.sendToAll(msg);
     }
 
     public static void main(String[] args){
