@@ -1,4 +1,4 @@
 CNet
 ====
 
-A NIO Wrapper for writing server/clients
+A SIO/NIO Wrapper for writing server/clients
