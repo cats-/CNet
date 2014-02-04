@@ -70,7 +70,6 @@ public abstract class AbstractNonBlockingClient extends AbstractClient{
                 try{
                     handler.handle(this, data);
                 }catch(Exception ex){
-                    CoreUtils.print(ex);
                     handler.handleException(this, data, ex);
                 }
             }

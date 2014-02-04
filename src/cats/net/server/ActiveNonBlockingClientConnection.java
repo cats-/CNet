@@ -46,7 +46,6 @@ final class ActiveNonBlockingClientConnection extends ActiveClientConnection{
                 try{
                     handler.handle(spot, this, data);
                 }catch(Exception ex){
-                    CoreUtils.print(ex);
                     handler.handleException(spot, this, data, ex);
                 }
             }
