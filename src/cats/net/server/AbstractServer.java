@@ -10,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServer> {
@@ -63,6 +64,10 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
     public List<ActiveClientConnection> getFilteredConnections(final ActiveClientConnection... clientConnections){
         final List<ActiveClientConnection> connections = Arrays.asList(clientConnections);
         return getConnected().stream().filter(c -> !connections.contains(c)).collect(Collectors.toList());
+    }
+
+    public ActiveClientConnection getConnectionByAttachment(final Object attachment){
+        return getConnected().stream().filter(c -> Objects.equals(c.attachment(), attachment)).findFirst().orElse(null);
     }
 
     public abstract Collection<ActiveClientConnection> getConnected();
