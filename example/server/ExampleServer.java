@@ -2,12 +2,12 @@ package example.server;
 
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
-import cats.net.server.AbstractBlockingServer;
+import cats.net.server.AbstractNonBlockingServer;
 import cats.net.server.ActiveClientConnection;
 import cats.net.server.event.ServerListener;
 import example.server.user.User;
 
-public class ExampleServer extends AbstractBlockingServer implements ServerListener<ExampleServer>{
+public class ExampleServer extends AbstractNonBlockingServer implements ServerListener<ExampleServer>{
 
     public ExampleServer(){
         super(4595);
