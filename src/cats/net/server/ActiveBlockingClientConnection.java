@@ -46,8 +46,13 @@ final class ActiveBlockingClientConnection extends ActiveClientConnection implem
             final Data data = Data.fromBuffer(Buffer.wrap(bytes));
             CoreUtils.print("received data with opcode %d", data.opcode);
             final ServerDataHandler handler = (ServerDataHandler)spot.getHandler(data.opcode);
-            if(handler != null)
-                handler.handle(spot, this, data);
+            if(handler != null){
+                try{
+                    handler.handle(spot, this, data);
+                }catch(Exception ex){
+                    CoreUtils.print(ex);
+                }
+            }
             bytes = buf.getBytes();
         }
     }

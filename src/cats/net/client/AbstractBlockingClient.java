@@ -64,8 +64,13 @@ public abstract class AbstractBlockingClient extends AbstractClient{
             final Data data = Data.fromBuffer(Buffer.wrap(bytes));
             CoreUtils.print("received data with opcode %d", data.opcode);
             final ClientDataHandler handler = (ClientDataHandler)handlers.get(data.opcode);
-            if(handler != null)
-                handler.handle(this, data);
+            if(handler != null){
+                try{
+                    handler.handle(this, data);
+                }catch(Exception ex){
+                    CoreUtils.print(ex);
+                }
+            }
             bytes = buf.getBytes();
         }
     }
