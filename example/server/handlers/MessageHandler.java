@@ -11,6 +11,6 @@ public class MessageHandler extends ServerDataHandler<ExampleServer>{
     public void handle(final ExampleServer server, final ActiveClientConnection connection, final Data data){
         final User user = connection.attachment();
         final Data msg = new Data(1).put("name", user.name).put("msg", data.getString("msg"));
-        server.getConnected().forEach(c -> c.send(msg));
+        server.sendToAll(msg);
     }
 }
