@@ -47,6 +47,7 @@ final class ActiveNonBlockingClientConnection extends ActiveClientConnection{
                     handler.handle(spot, this, data);
                 }catch(Exception ex){
                     CoreUtils.print(ex);
+                    handler.handleException(ex);
                 }
             }
             bytes = buf.getBytes();
