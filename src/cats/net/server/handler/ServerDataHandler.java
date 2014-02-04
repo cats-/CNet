@@ -8,4 +8,6 @@ import cats.net.server.ActiveClientConnection;
 public abstract class ServerDataHandler<T extends AbstractServer> extends AbstractDataHandler<T>{
 
     public abstract void handle(final T server, final ActiveClientConnection connection, final Data data);
+
+    public void handleException(final T server, final ActiveClientConnection connection, final Data data, final Exception ex){}
 }

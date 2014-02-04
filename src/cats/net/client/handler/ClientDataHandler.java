@@ -7,4 +7,6 @@ import cats.net.core.data.handler.AbstractDataHandler;
 public abstract class ClientDataHandler<T extends AbstractClient> extends AbstractDataHandler<T>{
 
     public abstract void handle(final T client, final Data data);
+
+    public void handleException(final T client, final Data data, final Exception ex){}
 }

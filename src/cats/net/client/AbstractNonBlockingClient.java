@@ -71,7 +71,7 @@ public abstract class AbstractNonBlockingClient extends AbstractClient{
                     handler.handle(this, data);
                 }catch(Exception ex){
                     CoreUtils.print(ex);
-                    handler.handleException(ex);
+                    handler.handleException(this, data, ex);
                 }
             }
             bytes = buf.getBytes();
