@@ -48,8 +48,12 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
 
     abstract boolean disconnect(final ActiveClientConnection connection);
 
-    public void sendToAll(final Data data){
-        getConnected().forEach(c -> c.send(data));
+    public void sendToAll(final Data... datas){
+        getConnected().forEach(c -> Arrays.stream(datas).forEach(c::send));
+    }
+
+    public void sendToAllExcept(final ActiveClientConnection exception, final Data... datas){
+        getFilteredConnections(exception).forEach(c -> Arrays.stream(datas).forEach(c::send));
     }
 
     public void sendToAllExcept(final Data data, final ActiveClientConnection... exceptions){
