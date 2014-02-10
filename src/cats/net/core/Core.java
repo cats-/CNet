@@ -4,6 +4,7 @@ import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
 import cats.net.core.decode.Decoder;
 import cats.net.core.encode.Encoder;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +45,25 @@ public final class Core {
         add(String.class,
                 (Encoder<String>) BufferBuilder::putString,
                 (Decoder<String>) Buffer::getString);
+        add(BufferedImage.class,
+                (Encoder<BufferedImage>) (bldr, img) -> {
+                    final int width = img.getWidth();
+                    final int height = img.getHeight();
+                    bldr.putInt(width).putInt(height).putInt(img.getType());
+                    for(int r = 0; r < height; r++)
+                        for(int c = 0; c < width; c++)
+                            bldr.putInt(img.getRGB(r, c));
+                },
+                (Decoder<BufferedImage>) buf -> {
+                    final int width = buf.getInt();
+                    final int height = buf.getInt();
+                    final BufferedImage img = new BufferedImage(width, height, buf.getInt());
+                    for(int r = 0; r < height; r++)
+                        for(int c = 0; c < width; c++)
+                            img.setRGB(r, c, buf.getInt());
+                    return img;
+                }
+        );
     }
 
     private Core(){}
