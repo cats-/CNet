@@ -125,8 +125,8 @@ public final class Buffer{
         }
     }
 
-    public Object getObject(){
-        return Core.getDecoder(getString()).decode(this);
+    public <T> T getObject(){
+        return (T) Core.getDecoder(getString()).decode(this);
     }
 
     public static Buffer wrap(final byte[] bytes){
