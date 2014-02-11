@@ -53,12 +53,28 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
         getConnected().forEach(c -> Arrays.stream(datas).forEach(c::send));
     }
 
+    public void sendToAll(final short opcode, final Object... args){
+        getConnected().forEach(c -> c.send(opcode, args));
+    }
+
+    public void sendToAll(final int opcode, final Object... args){
+        sendToAll((short) opcode, args);
+    }
+
     public void sendToAllExcept(final ActiveClientConnection exception, final Data... datas){
         getFilteredConnections(exception).forEach(c -> Arrays.stream(datas).forEach(c::send));
     }
 
     public void sendToAllExcept(final Data data, final ActiveClientConnection... exceptions){
         getFilteredConnections(exceptions).forEach(c -> c.send(data));
+    }
+
+    public void sendToAllExcept(final ActiveClientConnection exception, final short opcode, final Object... args){
+        getFilteredConnections(exception).forEach(c -> c.send(opcode, args));
+    }
+
+    public void sendToAllExcept(final ActiveClientConnection exception, final int opcode, final Object... args){
+        sendToAllExcept(exception, (short)opcode, args);
     }
 
     public List<ActiveClientConnection> getFilteredConnections(final ActiveClientConnection... clientConnections){

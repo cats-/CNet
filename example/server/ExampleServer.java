@@ -29,15 +29,13 @@ public class ExampleServer extends AbstractNonBlockingServer implements ServerLi
         final User user = new User(connection);
         connection.attach(user);
         connection.send(1, String.format("Welcome, %s", user.name));
-        final Data msg = Core.getDataFormer(1).form(String.format("%s has just joined", user.name));
-        server.sendToAllExcept(msg, connection);
+        server.sendToAllExcept(connection, 1, String.format("%s has just joined", user.name));
     }
 
     public void onLeave(final ExampleServer server, final ActiveClientConnection connection){
         final User user = connection.attachment();
         connection.attach(null);
-        final Data msg = Core.getDataFormer(1).form(String.format("%s has just left", user.name));
-        server.sendToAll(msg);
+        server.sendToAll(1, String.format("%s has just left", user.name));
     }
 
     public static void main(String[] args){
