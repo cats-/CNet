@@ -7,6 +7,7 @@ import cats.net.core.utils.CoreUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -88,7 +89,18 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
                 if(node.getNodeType() != Node.ELEMENT_NODE)
                     continue;
                 final Element element = (Element)node;
-                final int opcode = Integer.parseInt(element.getAttribute("opcode"));
+                int opcode = 0;
+                final String opcodeValue = element.getAttribute("opcode");
+                try{
+                    opcode = Integer.parseInt(opcodeValue);
+                }catch(Exception ex){
+                    final int idx = opcodeValue.lastIndexOf('.');
+                    final Class clazz = Class.forName(opcodeValue.substring(0, idx));
+                    final Field field = clazz.getDeclaredField(opcodeValue.substring(idx+1));
+                    if(!field.isAccessible())
+                        field.setAccessible(true);
+                    opcode = field.getType().equals(short.class) ? field.getShort(null) : field.getInt(null);
+                }
                 final Class<? extends AbstractDataHandler<T>> clazz = (Class<? extends AbstractDataHandler<T>>)Class.forName(element.getAttribute("class"));
                 addHandler(opcode, clazz.newInstance());
             }

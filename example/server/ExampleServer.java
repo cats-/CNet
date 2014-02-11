@@ -1,7 +1,6 @@
 package example.server;
 
 import cats.net.core.Core;
-import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
 import cats.net.server.AbstractNonBlockingServer;
 import cats.net.server.ActiveClientConnection;
@@ -28,7 +27,7 @@ public class ExampleServer extends AbstractNonBlockingServer implements ServerLi
     public void onJoin(final ExampleServer server, final ActiveClientConnection connection){
         final User user = new User(connection);
         connection.attach(user);
-        connection.send(1, String.format("Welcome, %s", user.name));
+        connection.send(1, "Welcome, %s", new Object[]{user.name});
         server.sendToAllExcept(connection, 1, String.format("%s has just joined", user.name));
     }
 
