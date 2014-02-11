@@ -1,5 +1,6 @@
 package cats.net.core.connection;
 
+import cats.net.core.Core;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.data.Data;
 import cats.net.core.data.former.DataFormer;
@@ -24,7 +25,7 @@ public abstract class AbstractConnection<T extends AbstractConnectionSpot> {
     }
 
     public boolean send(final short opcode, final Object... args) throws DataFormerNotSetException {
-        final DataFormer former = spot.getDataFormer(opcode);
+        final DataFormer former = Core.getDataFormer(opcode);
         if(former == null)
             throw new DataFormerNotSetException(opcode);
         return send(former.form(args));

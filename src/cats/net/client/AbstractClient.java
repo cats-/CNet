@@ -2,6 +2,7 @@ package cats.net.client;
 
 import cats.net.client.event.ClientListener;
 import cats.net.client.handler.ClientDataHandler;
+import cats.net.core.Core;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.connection.spot.event.AbstractConnectionSpotListener;
 import cats.net.core.data.Data;
@@ -40,7 +41,7 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
     abstract boolean send0(final Data data) throws Exception;
 
     public boolean send(final short opcode, final Object... args) throws DataFormerNotSetException {
-        final DataFormer former = getDataFormer(opcode);
+        final DataFormer former = Core.getDataFormer(opcode);
         if(former == null)
             throw new DataFormerNotSetException(opcode);
         return send(former.form(args));

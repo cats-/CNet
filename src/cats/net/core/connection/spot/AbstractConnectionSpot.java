@@ -2,7 +2,6 @@ package cats.net.core.connection.spot;
 
 import cats.net.core.connection.spot.event.AbstractConnectionSpotListener;
 import cats.net.core.connection.utils.ConnectionUtils;
-import cats.net.core.data.former.DataFormer;
 import cats.net.core.data.handler.AbstractDataHandler;
 import cats.net.core.utils.CoreUtils;
 import java.io.File;
@@ -24,7 +23,6 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
 
     protected final Map<Short, AbstractDataHandler<T>> handlers;
     protected final List<AbstractConnectionSpotListener<T>> listeners;
-    protected final Map<Short, DataFormer> dataFormers;
 
     protected final InetSocketAddress address;
 
@@ -35,8 +33,6 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
         handlers = new HashMap<>();
 
         listeners = new LinkedList<>();
-
-        dataFormers = new HashMap<>();
     }
 
     protected AbstractConnectionSpot(final String host, final int port){
@@ -49,18 +45,6 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
 
     public InetSocketAddress getAddress(){
         return address;
-    }
-
-    public void addDataFormer(final DataFormer former){
-       dataFormers.put(former.getOpcode(), former);
-    }
-
-    public DataFormer getDataFormer(final short opcode){
-        return dataFormers.get(opcode);
-    }
-
-    public DataFormer getDataFormer(final int opcode){
-        return getDataFormer((short)opcode);
     }
 
     public void addListener(final AbstractConnectionSpotListener<T> listener){

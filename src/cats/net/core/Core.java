@@ -2,16 +2,29 @@ package cats.net.core;
 
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
+import cats.net.core.connection.utils.ConnectionUtils;
+import cats.net.core.data.former.DataFormer;
 import cats.net.core.decode.Decoder;
 import cats.net.core.encode.Encoder;
+import cats.net.core.utils.CoreUtils;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public final class Core {
 
     private static final Map<String, Encoder> ENCODERS = new HashMap<>();
     private static final Map<String, Decoder> DECODERS = new HashMap<>();
+
+    private static final Map<Short, DataFormer> DATA_FORMERS = new HashMap<>();
 
     public static boolean verbose = true;
 
@@ -75,6 +88,49 @@ public final class Core {
     public static <T> void add(final String name, final Encoder<T> encoder, final Decoder<T> decoder){
         ENCODERS.put(name, encoder);
         DECODERS.put(name, decoder);
+    }
+
+    public static void addDataFormer(final DataFormer former){
+        DATA_FORMERS.put(former.getOpcode(), former);
+    }
+
+    public static boolean addDataFormers(final InputStream input){
+        try{
+            final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            final DocumentBuilder builder = factory.newDocumentBuilder();
+            final Document document = builder.parse(input);
+            document.getDocumentElement().normalize();
+            final NodeList handlers = document.getElementsByTagName("former");
+            for(int i = 0; i < handlers.getLength(); i++){
+                final Node node = handlers.item(i);
+                if(node.getNodeType() != Node.ELEMENT_NODE)
+                    continue;
+                final Class<? extends DataFormer> clazz = (Class<? extends DataFormer>)Class.forName(node.getNodeValue());
+                addDataFormer(clazz.newInstance());
+            }
+            ConnectionUtils.close(input);
+            return true;
+        }catch(Exception ex){
+            CoreUtils.print(ex);
+            return false;
+        }
+    }
+
+    public static boolean addDataFormers(final File xml){
+        try{
+            return addDataFormers(new FileInputStream(xml));
+        }catch(Exception ex){
+            CoreUtils.print(ex);
+            return false;
+        }
+    }
+
+    public static DataFormer getDataFormer(final short opcode){
+        return DATA_FORMERS.get(opcode);
+    }
+
+    public static DataFormer getDataFormer(final int opcode){
+        return getDataFormer((short)opcode);
     }
 
     public static Encoder getEncoder(final Class clazz){
