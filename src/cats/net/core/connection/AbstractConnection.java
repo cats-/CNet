@@ -31,6 +31,10 @@ public abstract class AbstractConnection<T extends AbstractConnectionSpot> {
         return send(former.form(args));
     }
 
+    public boolean send(final int opcode, final Object... args) throws DataFormerNotSetException{
+        return send((short)opcode, args);
+    }
+
     public T getSpot(){
         return spot;
     }

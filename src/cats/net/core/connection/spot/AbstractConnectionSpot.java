@@ -61,7 +61,7 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
 
     public void addHandler(final short opcode, final AbstractDataHandler<T> handler){
         handlers.put(opcode, handler);
-        CoreUtils.print("Registered %s at opcode %d", handler.getClass(), opcode);
+        CoreUtils.print("Registered handler %s at opcode %d", handler.getClass(), opcode);
     }
 
     public void addHandler(final int opcode, final AbstractDataHandler<T> handler){

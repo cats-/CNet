@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -92,6 +93,7 @@ public final class Core {
 
     public static void addDataFormer(final DataFormer former){
         DATA_FORMERS.put(former.getOpcode(), former);
+        CoreUtils.print("Registered former %s at opcode %d", former.getClass(), former.getOpcode());
     }
 
     public static boolean addDataFormers(final InputStream input){
@@ -105,7 +107,8 @@ public final class Core {
                 final Node node = handlers.item(i);
                 if(node.getNodeType() != Node.ELEMENT_NODE)
                     continue;
-                final Class<? extends DataFormer> clazz = (Class<? extends DataFormer>)Class.forName(node.getNodeValue());
+                final Element element = (Element)node;
+                final Class<? extends DataFormer> clazz = (Class<? extends DataFormer>)Class.forName(element.getTextContent());
                 addDataFormer(clazz.newInstance());
             }
             ConnectionUtils.close(input);

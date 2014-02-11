@@ -47,6 +47,10 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
         return send(former.form(args));
     }
 
+    public boolean send(final int opcode, final Object... args) throws DataFormerNotSetException{
+        return send((short)opcode, args);
+    }
+
     public boolean send(final Data data){
         try{
             return send0(data);

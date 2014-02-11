@@ -1,5 +1,6 @@
 package example.server;
 
+import cats.net.core.Core;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
 import cats.net.server.AbstractNonBlockingServer;
@@ -15,6 +16,7 @@ public class ExampleServer extends AbstractNonBlockingServer implements ServerLi
 
     public void onStart(){
         CoreUtils.print("ExampleServer start");
+        Core.addDataFormers(ExampleServer.class.getResourceAsStream("formers.xml"));
         addListener(this);
         addHandlers(ExampleServer.class.getResourceAsStream("handlers.xml"));
     }
@@ -26,15 +28,15 @@ public class ExampleServer extends AbstractNonBlockingServer implements ServerLi
     public void onJoin(final ExampleServer server, final ActiveClientConnection connection){
         final User user = new User(connection);
         connection.attach(user);
-        connection.send(new Data(1).put("name", "Server").put("msg", String.format("Welcome, %s", user.name)));
-        final Data msg = new Data(1).put("name", "Server").put("msg", String.format("%s has just joined", user.name));
+        connection.send(1, String.format("Welcome, %s", user.name));
+        final Data msg = Core.getDataFormer(1).form(String.format("%s has just joined", user.name));
         server.sendToAllExcept(msg, connection);
     }
 
     public void onLeave(final ExampleServer server, final ActiveClientConnection connection){
         final User user = connection.attachment();
         connection.attach(null);
-        final Data msg = new Data(1).put("name", "Server").put("msg", String.format("%s has just left", user.name));
+        final Data msg = Core.getDataFormer(1).form(String.format("%s has just left", user.name));
         server.sendToAll(msg);
     }
 
