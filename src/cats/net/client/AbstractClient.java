@@ -5,6 +5,8 @@ import cats.net.client.handler.ClientDataHandler;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.connection.spot.event.AbstractConnectionSpotListener;
 import cats.net.core.data.Data;
+import cats.net.core.data.former.DataFormer;
+import cats.net.core.data.former.DataFormerNotSetException;
 import cats.net.core.data.handler.AbstractDataHandler;
 import cats.net.core.utils.CoreUtils;
 import java.net.InetSocketAddress;
@@ -36,6 +38,13 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
     }
 
     abstract boolean send0(final Data data) throws Exception;
+
+    public boolean send(final short opcode, final Object... args) throws DataFormerNotSetException {
+        final DataFormer former = getDataFormer(opcode);
+        if(former == null)
+            throw new DataFormerNotSetException(opcode);
+        return send(former.form(args));
+    }
 
     public boolean send(final Data data){
         try{
