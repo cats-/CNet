@@ -5,7 +5,7 @@ import cats.net.core.buffer.BufferBuilder;
 import java.io.DataOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -17,7 +17,7 @@ public final class Data {
     public Data(final short opcode){
         this.opcode = opcode;
 
-        map = new HashMap<>();
+        map = new LinkedHashMap<>();
     }
 
     public Data(final int opcode){
