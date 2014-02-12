@@ -50,7 +50,11 @@ final class ActiveBlockingClientConnection extends ActiveClientConnection implem
                 try{
                     handler.handle(spot, this, data);
                 }catch(Exception ex){
-                    handler.handleException(spot, this, data, ex);
+                    try{
+                        handler.handleException(spot, this, data, ex);
+                    }catch(Exception e){
+                        CoreUtils.print(new Exception("error handling exception " + e.getMessage(), e));
+                    }
                 }
             }
             bytes = buf.getBytes();

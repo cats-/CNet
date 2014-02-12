@@ -68,7 +68,11 @@ public abstract class AbstractBlockingClient extends AbstractClient{
                 try{
                     handler.handle(this, data);
                 }catch(Exception ex){
-                    handler.handleException(this, data, ex);
+                    try{
+                        handler.handleException(this, data, ex);
+                    }catch(Exception e){
+                        CoreUtils.print(new Exception("error handling exception " + e.getMessage(), e));
+                    }
                 }
             }
             bytes = buf.getBytes();
