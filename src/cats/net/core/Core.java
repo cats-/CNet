@@ -128,8 +128,8 @@ public final class Core {
         }
     }
 
-    public static DataFormer getDataFormer(final short opcode){
-        return DATA_FORMERS.get(opcode);
+    public static <T extends DataFormer> T getDataFormer(final short opcode){
+        return (T)DATA_FORMERS.get(opcode);
     }
 
     public static DataFormer getDataFormer(final int opcode){
