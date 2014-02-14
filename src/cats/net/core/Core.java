@@ -7,6 +7,7 @@ import cats.net.core.data.former.DataFormer;
 import cats.net.core.decode.Decoder;
 import cats.net.core.encode.Encoder;
 import cats.net.core.utils.CoreUtils;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,6 +79,9 @@ public final class Core {
                     return img;
                 }
         );
+        add(Color.class,
+                (Encoder<Color>) (bldr, col) -> bldr.putInt(col.getRGB()),
+                (Decoder<Color>) buf -> new Color(buf.getInt()));
     }
 
     private Core(){}
