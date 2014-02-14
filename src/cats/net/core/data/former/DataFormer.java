@@ -15,15 +15,11 @@ public abstract class DataFormer {
     @Target(ElementType.METHOD)
     public @interface Former{}
 
-    protected final Data data = newData();
+    protected Data data;
 
-    public abstract short getOpcode();
+    public abstract short[] getOpcodes();
 
-    protected Data newData(){
-        return new Data(getOpcode());
-    }
-
-    public final Data form(final Object... args){
+    public final Data form(final short opcode, final Object... args){
         try{
            final Method method = Arrays.stream(getClass().getDeclaredMethods()).filter(
                    m -> m.isAnnotationPresent(Former.class)
@@ -34,6 +30,7 @@ public abstract class DataFormer {
                return null;
            if(!method.isAccessible())
                method.setAccessible(true);
+            data = new Data(opcode);
             return (Data)method.invoke(this, args);
         }catch(Exception ex){
             CoreUtils.print(ex);

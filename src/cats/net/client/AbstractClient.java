@@ -44,7 +44,7 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
         final DataFormer former = Core.getDataFormer(opcode);
         if(former == null)
             throw new DataFormerNotSetException(opcode);
-        return send(former.form(args));
+        return send(former.form(opcode, args));
     }
 
     public boolean send(final int opcode, final Object... args) throws DataFormerNotSetException{

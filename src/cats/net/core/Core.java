@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,7 +29,7 @@ public final class Core {
     private static final Map<String, Encoder> ENCODERS = new HashMap<>();
     private static final Map<String, Decoder> DECODERS = new HashMap<>();
 
-    private static final Map<Short, DataFormer> DATA_FORMERS = new HashMap<>();
+    private static final Map<short[], DataFormer> DATA_FORMERS = new HashMap<>();
 
     public static boolean verbose = true;
 
@@ -108,8 +109,8 @@ public final class Core {
     }
 
     public static void addDataFormer(final DataFormer former){
-        DATA_FORMERS.put(former.getOpcode(), former);
-        CoreUtils.print("Registered former %s at opcode %d", former.getClass(), former.getOpcode());
+        DATA_FORMERS.put(former.getOpcodes(), former);
+        CoreUtils.print("Registered former %s at opcodes: %s", former.getClass(), Arrays.toString(former.getOpcodes()));
     }
 
     public static boolean addDataFormers(final InputStream input){
@@ -145,7 +146,11 @@ public final class Core {
     }
 
     public static <T extends DataFormer> T getDataFormer(final short opcode){
-        return (T)DATA_FORMERS.get(opcode);
+        for(final short[] opcodes : DATA_FORMERS.keySet())
+            for(final short o : opcodes)
+                if(o == opcode)
+                    return (T) DATA_FORMERS.get(opcodes);
+        return null;
     }
 
     public static DataFormer getDataFormer(final int opcode){
