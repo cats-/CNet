@@ -15,9 +15,11 @@ public abstract class DataFormer {
     @Target(ElementType.METHOD)
     public @interface Former{}
 
+    protected final Data data = newData();
+
     public abstract short getOpcode();
 
-    protected Data data(){
+    protected Data newData(){
         return new Data(getOpcode());
     }
 
