@@ -8,6 +8,8 @@ import cats.net.core.decode.Decoder;
 import cats.net.core.encode.Encoder;
 import cats.net.core.utils.CoreUtils;
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,7 +83,20 @@ public final class Core {
         );
         add(Color.class,
                 (Encoder<Color>) (bldr, col) -> bldr.putInt(col.getRGB()),
-                (Decoder<Color>) buf -> new Color(buf.getInt()));
+                (Decoder<Color>) buf -> new Color(buf.getInt())
+        );
+        add(Point.class,
+                (Encoder<Point>) (bldr, pt) -> {
+                    bldr.putInt(pt.x).putInt(pt.y);
+                },
+                (Decoder<Point>) buf -> new Point(buf.getInt(), buf.getInt())
+        );
+        add(Rectangle.class,
+                (Encoder<Rectangle>) (bldr, rect) -> {
+                    bldr.putInt(rect.x).putInt(rect.y).putInt(rect.width).putInt(rect.height);
+                },
+                (Decoder<Rectangle>) buf -> new Rectangle(buf.getInt(), buf.getInt(), buf.getInt(), buf.getInt())
+        );
     }
 
     private Core(){}
