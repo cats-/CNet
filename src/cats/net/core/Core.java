@@ -86,15 +86,12 @@ public final class Core {
                 (Decoder<Color>) buf -> new Color(buf.getInt())
         );
         add(Point.class,
-                (Encoder<Point>) (bldr, pt) -> {
-                    bldr.putInt(pt.x).putInt(pt.y);
-                },
+                (Encoder<Point>) (bldr, pt) -> bldr.putInt(pt.x).putInt(pt.y),
                 (Decoder<Point>) buf -> new Point(buf.getInt(), buf.getInt())
         );
         add(Rectangle.class,
-                (Encoder<Rectangle>) (bldr, rect) -> {
-                    bldr.putInt(rect.x).putInt(rect.y).putInt(rect.width).putInt(rect.height);
-                },
+                (Encoder<Rectangle>) (bldr, rect) ->
+                    bldr.putInt(rect.x).putInt(rect.y).putInt(rect.width).putInt(rect.height),
                 (Decoder<Rectangle>) buf -> new Rectangle(buf.getInt(), buf.getInt(), buf.getInt(), buf.getInt())
         );
     }
