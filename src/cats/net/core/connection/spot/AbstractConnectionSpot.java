@@ -161,10 +161,6 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
         }
     }
 
-    public abstract void onStart();
-
-    public abstract void onFinish();
-
     public abstract boolean isConnected();
 
     public abstract void disconnect();
