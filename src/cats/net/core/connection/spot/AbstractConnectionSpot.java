@@ -126,7 +126,7 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
         listeners.stream().filter(
                 l -> l instanceof SpotStateListener
         ).forEach(
-                l -> ((SpotStateListener)l).onStart(this)
+                l -> ((SpotStateListener<T>)l).onStart((T)this)
         );
     }
 
@@ -134,7 +134,7 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
         listeners.stream().filter(
                 l -> l instanceof SpotStateListener
         ).forEach(
-                l -> ((SpotStateListener)l).onFinish(this)
+                l -> ((SpotStateListener<T>)l).onFinish((T)this)
         );
     }
 
