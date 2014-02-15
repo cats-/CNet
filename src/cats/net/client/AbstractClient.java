@@ -4,7 +4,7 @@ import cats.net.client.event.ClientListener;
 import cats.net.client.handler.ClientDataHandler;
 import cats.net.core.Core;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
-import cats.net.core.connection.spot.event.AbstractConnectionSpotListener;
+import cats.net.core.connection.spot.event.ConnectionSpotListener;
 import cats.net.core.data.Data;
 import cats.net.core.data.former.DataFormer;
 import cats.net.core.data.former.DataFormerNotSetException;
@@ -27,7 +27,7 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
     }
 
     public void addListener(final ClientListener listener){
-        addListener((AbstractConnectionSpotListener<AbstractClient>)listener);
+        addListener((ConnectionSpotListener<AbstractClient>)listener);
     }
 
     public void addHandler(final short opcode, final ClientDataHandler handler){

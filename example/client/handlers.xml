@@ -1,3 +1,0 @@
-<handlers>
-    <handler opcode="1" class="example.client.handlers.MessageHandler"/>
-</handlers>

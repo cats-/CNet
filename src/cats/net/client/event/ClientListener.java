@@ -1,9 +1,9 @@
 package cats.net.client.event;
 
 import cats.net.client.AbstractClient;
-import cats.net.core.connection.spot.event.AbstractConnectionSpotListener;
+import cats.net.core.connection.spot.event.ConnectionSpotListener;
 
-public interface ClientListener<T extends AbstractClient> extends AbstractConnectionSpotListener<T>{
+public interface ClientListener<T extends AbstractClient> extends ConnectionSpotListener<T> {
 
     public void onConnect(final T client);
 }

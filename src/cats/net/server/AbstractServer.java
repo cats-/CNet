@@ -1,7 +1,7 @@
 package cats.net.server;
 
 import cats.net.core.connection.spot.AbstractConnectionSpot;
-import cats.net.core.connection.spot.event.AbstractConnectionSpotListener;
+import cats.net.core.connection.spot.event.ConnectionSpotListener;
 import cats.net.core.data.Data;
 import cats.net.core.data.handler.AbstractDataHandler;
 import cats.net.server.event.ServerListener;
@@ -36,7 +36,7 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
     }
 
     public void addListener(final ServerListener listener){
-        addListener((AbstractConnectionSpotListener)listener);
+        addListener((ConnectionSpotListener)listener);
     }
 
     public void addHandler(final short opcode, final ServerDataHandler handler){

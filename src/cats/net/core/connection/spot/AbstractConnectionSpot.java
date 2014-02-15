@@ -1,6 +1,7 @@
 package cats.net.core.connection.spot;
 
-import cats.net.core.connection.spot.event.AbstractConnectionSpotListener;
+import cats.net.core.connection.spot.event.ConnectionSpotListener;
+import cats.net.core.connection.spot.event.SpotStateListener;
 import cats.net.core.connection.utils.ConnectionUtils;
 import cats.net.core.data.handler.AbstractDataHandler;
 import cats.net.core.utils.CoreUtils;
@@ -23,7 +24,7 @@ import org.w3c.dom.NodeList;
 public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> extends Thread implements Runnable{
 
     protected final Map<Short, AbstractDataHandler<T>> handlers;
-    protected final List<AbstractConnectionSpotListener<T>> listeners;
+    protected final List<ConnectionSpotListener<T>> listeners;
 
     protected final InetSocketAddress address;
 
@@ -48,11 +49,11 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
         return address;
     }
 
-    public void addListener(final AbstractConnectionSpotListener<T> listener){
+    public void addListener(final ConnectionSpotListener<T> listener){
         listeners.add(listener);
     }
 
-    public void removeListener(final AbstractConnectionSpotListener<T> listener){
+    public void removeListener(final ConnectionSpotListener<T> listener){
         listeners.remove(listener);
     }
 
@@ -121,6 +122,22 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
         }
     }
 
+    protected void fireOnStart(){
+        listeners.stream().filter(
+                l -> l instanceof SpotStateListener
+        ).forEach(
+                l -> ((SpotStateListener)l).onStart(this)
+        );
+    }
+
+    protected void fireOnFinish(){
+        listeners.stream().filter(
+                l -> l instanceof SpotStateListener
+        ).forEach(
+                l -> ((SpotStateListener)l).onFinish(this)
+        );
+    }
+
     public void run(){
         while(canLoop()){
             try{
@@ -131,12 +148,12 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
                 break;
             }
         }
-        onFinish();
+        fireOnFinish();
     }
 
     public void start(){
         try{
-            onStart();
+            fireOnStart();
             connect();
             super.start();
         }catch(Exception ex){
