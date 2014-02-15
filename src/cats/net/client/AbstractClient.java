@@ -1,6 +1,7 @@
 package cats.net.client;
 
 import cats.net.client.event.ClientListener;
+import cats.net.client.event.ClientStateListener;
 import cats.net.client.handler.ClientDataHandler;
 import cats.net.core.Core;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
@@ -27,7 +28,11 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
     }
 
     public void addListener(final ClientListener listener){
-        addListener((ConnectionSpotListener<AbstractClient>)listener);
+        addListener((ConnectionSpotListener)listener);
+    }
+
+    public void addListener(final ClientStateListener listener){
+        addListener((ConnectionSpotListener)listener);
     }
 
     public void addHandler(final short opcode, final ClientDataHandler handler){

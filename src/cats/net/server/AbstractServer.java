@@ -5,6 +5,7 @@ import cats.net.core.connection.spot.event.ConnectionSpotListener;
 import cats.net.core.data.Data;
 import cats.net.core.data.handler.AbstractDataHandler;
 import cats.net.server.event.ServerListener;
+import cats.net.server.event.ServerStateListener;
 import cats.net.server.handler.ServerDataHandler;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
@@ -36,6 +37,10 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
     }
 
     public void addListener(final ServerListener listener){
+        addListener((ConnectionSpotListener)listener);
+    }
+
+    public void addListener(final ServerStateListener listener){
         addListener((ConnectionSpotListener)listener);
     }
 
