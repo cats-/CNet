@@ -153,6 +153,7 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
 
     public void start(){
         try{
+            init();
             fireOnStart();
             connect();
             super.start();
@@ -160,6 +161,8 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
             CoreUtils.print(ex);
         }
     }
+
+    public abstract void init();
 
     public abstract boolean isConnected();
 
