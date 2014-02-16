@@ -20,8 +20,8 @@ public abstract class AbstractConnection<T extends AbstractConnectionSpot> {
         this.attachment = attachment;
     }
 
-    public <T> T attachment(){
-        return (T) attachment;
+    public <J> J attachment(){
+        return (J) attachment;
     }
 
     public boolean send(final short opcode, final Object... args) throws DataFormerNotSetException {
