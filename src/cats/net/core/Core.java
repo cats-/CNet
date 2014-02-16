@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
@@ -94,6 +95,10 @@ public final class Core {
                 (Encoder<Rectangle>) (bldr, rect) ->
                     bldr.putInt(rect.x).putInt(rect.y).putInt(rect.width).putInt(rect.height),
                 (Decoder<Rectangle>) buf -> new Rectangle(buf.getInt(), buf.getInt(), buf.getInt(), buf.getInt())
+        );
+        add(Date.class,
+                (Encoder<Date>) (bldr, date) -> bldr.putLong(date.getTime()),
+                (Decoder<Date>) buf -> new Date(buf.getLong())
         );
     }
 
