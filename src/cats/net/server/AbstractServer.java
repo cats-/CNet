@@ -83,7 +83,7 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
     }
 
     public <J> List<J> getConnectedAttachments(){
-        return getConnected().stream().map(c -> (J) c.attachment()).collect(Collectors.toList());
+        return getConnected().stream().filter(c -> c != null).map(c -> (J)c).collect(Collectors.toList());
     }
 
     public List<ActiveClientConnection> getFilteredConnections(final ActiveClientConnection... clientConnections){
