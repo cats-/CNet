@@ -30,7 +30,7 @@ public final class Core {
     private static final Map<String, Encoder> ENCODERS = new HashMap<>();
     private static final Map<String, Decoder> DECODERS = new HashMap<>();
 
-    private static final Map<short[], DataFormer> DATA_FORMERS = new HashMap<>();
+    private static final Map<Short, DataFormer> DATA_FORMERS = new HashMap<>();
 
     public static boolean verbose = true;
 
@@ -114,7 +114,8 @@ public final class Core {
     }
 
     public static void addDataFormer(final DataFormer former){
-        DATA_FORMERS.put(former.getOpcodes(), former);
+        for(final short s : former.getOpcodes())
+            DATA_FORMERS.put(s, former);
         CoreUtils.print("Registered former %s at opcodes: %s", former.getClass(), Arrays.toString(former.getOpcodes()));
     }
 
@@ -151,11 +152,7 @@ public final class Core {
     }
 
     public static <T extends DataFormer> T getDataFormer(final short opcode){
-        for(final short[] opcodes : DATA_FORMERS.keySet())
-            for(final short o : opcodes)
-                if(o == opcode)
-                    return (T) DATA_FORMERS.get(opcodes);
-        return null;
+        return (T) DATA_FORMERS.get(opcode);
     }
 
     public static DataFormer getDataFormer(final int opcode){
