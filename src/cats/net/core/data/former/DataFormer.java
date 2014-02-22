@@ -38,7 +38,7 @@ public abstract class DataFormer {
         }
     }
 
-    private static Class[] paramTypes(final Object... args){
+    private static Class[] types(final Object... args){
         final Class[] types = new Class[args.length];
         for(int i = 0; i < args.length; i++)
             types[i] = args[i].getClass();
@@ -46,6 +46,12 @@ public abstract class DataFormer {
     }
 
     private static boolean matches(final Object[] args, final Class[] paramTypes){
-        return Arrays.equals(paramTypes(args), paramTypes);
+        final Class[] argTypes = types(args);
+        if(Arrays.equals(argTypes, paramTypes))
+            return true;
+        for(int i = 0; i < argTypes.length; i++)
+            if(!argTypes[i].isAssignableFrom(paramTypes[i]) && !argTypes[i].equals(paramTypes[i]))
+                return false;
+        return true;
     }
 }
