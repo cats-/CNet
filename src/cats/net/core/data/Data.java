@@ -24,20 +24,6 @@ public final class Data {
         this((short) opcode);
     }
 
-    public Buffer toBuffer(){
-        final BufferBuilder builder = new BufferBuilder();
-        builder.putShort(opcode);
-        builder.putInt(map.size());
-        map.entrySet().forEach(
-                entry -> {
-                    builder.putString(entry.getKey());
-                    builder.putObject(entry.getValue());
-                }
-        );
-        final Buffer buf = builder.create();
-        return new BufferBuilder().putBytes(buf.array()).create();
-    }
-
     public Data put(final String key, final Object value){
         map.put(key, value);
         return this;
@@ -83,14 +69,28 @@ public final class Data {
         return get(key, String.class);
     }
 
+    public Buffer toBuffer(){
+        final BufferBuilder builder = new BufferBuilder();
+        builder.putShort(opcode);
+        builder.putInt(map.size());
+        map.entrySet().forEach(
+                entry -> {
+                    builder.putString(entry.getKey());
+                    builder.putObject(entry.getValue());
+                }
+        );
+        return builder.create();
+    }
+
     public boolean writeTo(final DataOutputStream out) throws Exception{
-        final Buffer buffer = toBuffer();
+        final Buffer buffer = new BufferBuilder().putBytes(toBuffer().array()).create();
         out.write(buffer.array());
         return true;
     }
 
     public boolean writeTo(final SocketChannel channel) throws Exception{
-        final ByteBuffer buffer = toBuffer().toByteBuffer();
+        final Buffer buf = new BufferBuilder().putBytes(toBuffer().array()).create();
+        final ByteBuffer buffer = buf.toByteBuffer();
         int count = 0;
         while(buffer.hasRemaining())
             count += channel.write(buffer);
