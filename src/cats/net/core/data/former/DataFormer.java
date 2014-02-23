@@ -1,5 +1,6 @@
 package cats.net.core.data.former;
 
+import cats.net.core.Core;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
 import java.lang.annotation.ElementType;
@@ -26,6 +27,7 @@ public abstract class DataFormer {
                            && matches(args, m.getParameterTypes())
                            && m.getReturnType().equals(Data.class)
            ).findFirst().orElse(null);
+            CoreUtils.print("data former method for opcode %d: %s", opcode, method);
            if(method == null)
                return null;
            if(!method.isAccessible())
