@@ -1,6 +1,5 @@
 package cats.net.core.data.former;
 
-import cats.net.core.Core;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
 import java.lang.annotation.ElementType;
