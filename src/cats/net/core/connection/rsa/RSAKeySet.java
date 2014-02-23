@@ -1,7 +1,6 @@
 package cats.net.core.connection.rsa;
 
 import cats.net.core.utils.CoreUtils;
-import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 

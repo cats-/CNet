@@ -5,11 +5,13 @@ import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.RSAPublicKeySpec;
+import javax.crypto.Cipher;
 
 public class RSAPubKey {
 
     private PublicKey key;
     private RSAPublicKeySpec spec;
+    private Cipher cipher;
 
     public RSAPubKey(final PublicKey key){
         this.key = key;
@@ -19,14 +21,37 @@ public class RSAPubKey {
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
+
+        initCipher();
     }
 
     public RSAPubKey(final BigInteger mod, final BigInteger exp){
         spec = new RSAPublicKeySpec(mod, exp);
+
         try{
             key = KeyFactory.getInstance("RSA").generatePublic(spec);
         }catch(Exception ex){
             CoreUtils.print(ex);
+        }
+
+        initCipher();
+    }
+
+    private void initCipher(){
+        try{
+            cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        }catch(Exception ex){
+            CoreUtils.print(ex);
+        }
+    }
+
+    public byte[] encrypt(final byte[] bytes){
+        try{
+            return cipher.doFinal(bytes);
+        }catch(Exception ex){
+            CoreUtils.print(ex);
+            return bytes;
         }
     }
 
@@ -36,5 +61,9 @@ public class RSAPubKey {
 
     public RSAPublicKeySpec spec(){
         return spec;
+    }
+
+    public Cipher cipher(){
+        return cipher;
     }
 }

@@ -1,6 +1,5 @@
 package cats.net.server;
 
-import cats.net.core.connection.rsa.RSAKeySet;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.connection.spot.event.ConnectionSpotListener;
 import cats.net.core.data.Data;
@@ -17,12 +16,8 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServer> {
 
-    protected RSAKeySet set;
-
     AbstractServer(final InetSocketAddress address){
         super(address);
-
-        set = new RSAKeySet(2048);
     }
 
     void fireOnJoin(final ActiveClientConnection connection){
