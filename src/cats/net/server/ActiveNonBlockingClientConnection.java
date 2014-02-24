@@ -77,4 +77,8 @@ final class ActiveNonBlockingClientConnection extends ActiveClientConnection{
         }
         spot.disconnect(this);
     }
+
+    public String toString(){
+        return channel.toString();
+    }
 }

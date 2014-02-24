@@ -92,4 +92,8 @@ final class ActiveBlockingClientConnection extends ActiveClientConnection implem
         t.setPriority(Thread.MAX_PRIORITY);
         t.start();
     }
+
+    public String toString(){
+        return socket.toString();
+    }
 }
