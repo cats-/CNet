@@ -2,6 +2,7 @@ package cats.net.core.data;
 
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
+import cats.net.core.connection.rsa.RSAPrivKey;
 import cats.net.core.connection.rsa.RSAPubKey;
 import java.io.DataOutputStream;
 import java.nio.ByteBuffer;
@@ -93,5 +94,9 @@ public final class Data {
                 i -> data.map.put(buffer.getString(), buffer.getObject())
         );
         return data;
+    }
+
+    public static Data fromBuffer(final Buffer buffer, final RSAPrivKey key){
+        return fromBuffer(key.decryptToBuffer(buffer));
     }
 }
