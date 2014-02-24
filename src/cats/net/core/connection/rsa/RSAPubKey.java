@@ -30,7 +30,7 @@ public class RSAPubKey {
         spec = new RSAPublicKeySpec(mod, exp);
 
         try{
-            key = KeyFactory.getInstance("RSA", "BC").generatePublic(spec);
+            key = KeyFactory.getInstance("RSA").generatePublic(spec);
         }catch(Exception ex){
             CoreUtils.print(ex);
         }

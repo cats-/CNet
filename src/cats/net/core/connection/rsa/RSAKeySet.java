@@ -13,8 +13,8 @@ public class RSAKeySet {
 
     public RSAKeySet(final int size){
         try{
-            final KeyFactory factory = KeyFactory.getInstance("RSA", "BC");
-            final KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA", "BC");
+            final KeyFactory factory = KeyFactory.getInstance("RSA");
+            final KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
             gen.initialize(size);
             final KeyPair pair = gen.generateKeyPair();
             pub = new RSAPubKey(factory, pair.getPublic());
@@ -34,7 +34,7 @@ public class RSAKeySet {
 
     public static Cipher newCipher(){
         try{
-            return Cipher.getInstance("RSA/None/NoPadding", "BC");
+            return Cipher.getInstance("RSA");
         }catch(Exception ex){
             CoreUtils.print(ex);
             return null;
