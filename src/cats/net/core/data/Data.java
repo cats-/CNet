@@ -82,21 +82,6 @@ public final class Data {
         return builder.create();
     }
 
-    public boolean writeTo(final DataOutputStream out) throws Exception{
-        final Buffer buffer = new BufferBuilder().putBytes(toBuffer().array()).create();
-        out.write(buffer.array());
-        return true;
-    }
-
-    public boolean writeTo(final SocketChannel channel) throws Exception{
-        final Buffer buf = new BufferBuilder().putBytes(toBuffer().array()).create();
-        final ByteBuffer buffer = buf.toByteBuffer();
-        int count = 0;
-        while(buffer.hasRemaining())
-            count += channel.write(buffer);
-        return count == buffer.capacity();
-    }
-
     public static Data fromBuffer(final Buffer buffer){
         final Data data = new Data(buffer.getShort());
         IntStream.range(0, buffer.getInt()).forEach(

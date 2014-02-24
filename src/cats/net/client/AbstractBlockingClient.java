@@ -3,6 +3,7 @@ package cats.net.client;
 import cats.net.client.handler.ClientDataHandler;
 import cats.net.core.Core;
 import cats.net.core.buffer.Buffer;
+import cats.net.core.buffer.BufferBuilder;
 import cats.net.core.connection.utils.ConnectionUtils;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
@@ -51,7 +52,11 @@ public abstract class AbstractBlockingClient extends AbstractClient{
     }
 
     boolean send0(final Data data) throws Exception{
-        return data != null && data.writeTo(out);
+        if(data == null)
+            return false;
+        final Buffer buf = new BufferBuilder().putBytes(data.toBuffer().array()).create();
+        out.write(buf.array());
+        return true;
     }
 
     protected void read() throws Exception{
