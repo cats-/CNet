@@ -62,7 +62,10 @@ public final class Buffer{
 
     public byte[] getBytes(){
         try{
-            final byte[] bytes = new byte[getInt()];
+            final int size = getInt();
+            if(size < 0)
+                return new byte[0];
+            final byte[] bytes = new byte[size];
             in.readFully(bytes);
             return bytes;
         }catch(Exception ex){
