@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServer> {
 
-    public static final int RSA_SIZE = 2048;
+    public static final int RSA_SIZE = 1024;
 
     private RSAKeySet keys;
 
