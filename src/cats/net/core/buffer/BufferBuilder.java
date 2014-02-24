@@ -1,6 +1,7 @@
 package cats.net.core.buffer;
 
 import cats.net.core.Core;
+import cats.net.core.connection.rsa.RSAPubKey;
 import cats.net.core.utils.CoreUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -18,6 +19,10 @@ public final class BufferBuilder {
 
     public Buffer create(){
         return Buffer.wrap(baos.toByteArray());
+    }
+
+    public Buffer create(final RSAPubKey key){
+        return key.encryptToBuffer(baos.toByteArray());
     }
 
     public int size(){
