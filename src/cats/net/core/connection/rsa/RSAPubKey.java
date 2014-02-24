@@ -14,11 +14,11 @@ public class RSAPubKey {
     private RSAPublicKeySpec spec;
     private Cipher cipher;
 
-    public RSAPubKey(final PublicKey key){
+    public RSAPubKey(final KeyFactory factory, final PublicKey key){
         this.key = key;
 
         try{
-            spec = KeyFactory.getInstance("RSA").getKeySpec(key, RSAPublicKeySpec.class);
+            spec = factory.getKeySpec(key, RSAPublicKeySpec.class);
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
@@ -30,7 +30,7 @@ public class RSAPubKey {
         spec = new RSAPublicKeySpec(mod, exp);
 
         try{
-            key = KeyFactory.getInstance("RSA").generatePublic(spec);
+            key = KeyFactory.getInstance("RSA", "BC").generatePublic(spec);
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
@@ -40,7 +40,7 @@ public class RSAPubKey {
 
     private void initCipher(){
         try{
-            cipher = Cipher.getInstance("RSA");
+            cipher = RSAKeySet.newCipher();
             cipher.init(Cipher.ENCRYPT_MODE, key);
         }catch(Exception ex){
             CoreUtils.print(ex);

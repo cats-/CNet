@@ -14,11 +14,11 @@ public class RSAPrivKey {
     private RSAPrivateKeySpec spec;
     private Cipher cipher;
 
-    public RSAPrivKey(final PrivateKey key){
+    public RSAPrivKey(final KeyFactory factory, final PrivateKey key){
         this.key = key;
 
         try{
-            spec = KeyFactory.getInstance("RSA").getKeySpec(key, RSAPrivateKeySpec.class);
+            spec = factory.getKeySpec(key, RSAPrivateKeySpec.class);
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
@@ -30,7 +30,7 @@ public class RSAPrivKey {
         spec = new RSAPrivateKeySpec(mod, exp);
 
         try{
-            key = KeyFactory.getInstance("RSA").generatePrivate(spec);
+            key = KeyFactory.getInstance("RSA", "BC").generatePrivate(spec);
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
@@ -40,7 +40,7 @@ public class RSAPrivKey {
 
     private void initCipher(){
         try{
-            cipher = Cipher.getInstance("RSA");
+            cipher = RSAKeySet.newCipher();
             cipher.init(Cipher.DECRYPT_MODE, key);
         }catch(Exception ex){
             CoreUtils.print(ex);

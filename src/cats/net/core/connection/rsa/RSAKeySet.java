@@ -1,8 +1,10 @@
 package cats.net.core.connection.rsa;
 
 import cats.net.core.utils.CoreUtils;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import javax.crypto.Cipher;
 
 public class RSAKeySet {
 
@@ -11,11 +13,12 @@ public class RSAKeySet {
 
     public RSAKeySet(final int size){
         try{
-            final KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
+            final KeyFactory factory = KeyFactory.getInstance("RSA", "BC");
+            final KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA", "BC");
             gen.initialize(size);
             final KeyPair pair = gen.generateKeyPair();
-            pub = new RSAPubKey(pair.getPublic());
-            priv = new RSAPrivKey(pair.getPrivate());
+            pub = new RSAPubKey(factory, pair.getPublic());
+            priv = new RSAPrivKey(factory, pair.getPrivate());
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
@@ -27,5 +30,14 @@ public class RSAKeySet {
 
     public RSAPrivKey privateKey(){
         return priv;
+    }
+
+    public static Cipher newCipher(){
+        try{
+            return Cipher.getInstance("RSA/None/NoPadding", "BC");
+        }catch(Exception ex){
+            CoreUtils.print(ex);
+            return null;
+        }
     }
 }
