@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -99,6 +100,10 @@ public final class Core {
         add(Date.class,
                 (Encoder<Date>) (bldr, date) -> bldr.putLong(date.getTime()),
                 (Decoder<Date>) buf -> new Date(buf.getLong())
+        );
+        add(BigInteger.class,
+                (Encoder<BigInteger>) (bldr, bi) -> bldr.putString(bi.toString()),
+                (Decoder<BigInteger>) buf -> new BigInteger(buf.getString())
         );
     }
 

@@ -4,6 +4,7 @@ import cats.net.client.event.ClientListener;
 import cats.net.client.event.ClientStateListener;
 import cats.net.client.handler.ClientDataHandler;
 import cats.net.core.Core;
+import cats.net.core.connection.rsa.RSAPubKey;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.connection.spot.event.ConnectionSpotListener;
 import cats.net.core.data.Data;
@@ -11,12 +12,27 @@ import cats.net.core.data.former.DataFormer;
 import cats.net.core.data.former.DataFormerNotSetException;
 import cats.net.core.data.handler.AbstractDataHandler;
 import cats.net.core.utils.CoreUtils;
+import java.math.BigInteger;
 import java.net.InetSocketAddress;
 
 public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClient>{
 
+    private RSAPubKey key;
+
     AbstractClient(final InetSocketAddress address){
         super(address);
+    }
+
+    void initRSAKey(final BigInteger mod, final BigInteger exp){
+        key = new RSAPubKey(mod, exp);
+    }
+
+    public final RSAPubKey RSAKey(){
+        return key;
+    }
+
+    public final boolean isUsingRSA(){
+        return key != null;
     }
 
     void fireOnConnect(){

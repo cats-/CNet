@@ -25,19 +25,22 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
         super(address);
     }
 
-    public void initRSAKeys(final int size){
+    public final boolean initRSAKeys(final int size){
+        if(isConnected())
+            return false;
         keys = new RSAKeySet(size);
+        return true;
     }
 
-    public void initRSAKeys(){
-        initRSAKeys(RSA_SIZE);
+    public final boolean initRSAKeys(){
+        return initRSAKeys(RSA_SIZE);
     }
 
-    public RSAKeySet RSAKeys(){
+    public final RSAKeySet RSAKeys(){
         return keys;
     }
 
-    public boolean isUsingRSA(){
+    public final boolean isUsingRSA(){
         return keys != null;
     }
 

@@ -22,7 +22,7 @@ public final class BufferBuilder {
     }
 
     public Buffer create(final RSAPubKey key){
-        return key.encryptToBuffer(baos.toByteArray());
+        return key == null ? create() : key.encryptToBuffer(baos.toByteArray());
     }
 
     public int size(){

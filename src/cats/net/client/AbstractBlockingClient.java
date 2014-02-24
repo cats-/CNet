@@ -10,6 +10,7 @@ import cats.net.core.utils.CoreUtils;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
+import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -54,7 +55,7 @@ public abstract class AbstractBlockingClient extends AbstractClient{
     boolean send0(final Data data) throws Exception{
         if(data == null)
             return false;
-        final Buffer buf = new BufferBuilder().putBytes(data.toBuffer().array()).create();
+        final Buffer buf = new BufferBuilder().putBytes(data.toBuffer().array()).create(RSAKey());
         return ConnectionUtils.write(out, buf);
     }
 
@@ -67,6 +68,10 @@ public abstract class AbstractBlockingClient extends AbstractClient{
         while(bytes.length != 0){
             final Data data = Data.fromBuffer(Buffer.wrap(bytes));
             CoreUtils.print("received data with opcode %d", data.opcode);
+            if(data.opcode == Short.MIN_VALUE){
+                initRSAKey(data.get("mod", BigInteger.class), data.get("exp", BigInteger.class));
+                continue;
+            }
             final ClientDataHandler handler = (ClientDataHandler)handlers.get(data.opcode);
             if(handler != null){
                 try{

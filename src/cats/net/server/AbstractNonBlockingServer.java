@@ -1,11 +1,15 @@
 package cats.net.server;
 
+import cats.net.core.connection.rsa.RSAPubKey;
+import cats.net.core.connection.utils.ConnectionUtils;
+import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,6 +56,11 @@ public abstract class AbstractNonBlockingServer extends AbstractServer{
             final SelectionKey key = client.register(selector, SelectionKey.OP_READ);
             final ActiveNonBlockingClientConnection connection = new ActiveNonBlockingClientConnection(this, key, client);
             connected.put(key, connection);
+            if(isUsingRSA()){
+                final RSAPublicKeySpec pub = RSAKeys().publicKey().spec();
+                final Data data = new Data(Short.MIN_VALUE).put("mod", pub.getModulus()).put("exp", pub.getPublicExponent());
+                connection.send(data);
+            }
             fireOnJoin(connection);
         }catch(Exception ex){
             CoreUtils.print(ex);
