@@ -4,6 +4,7 @@ import cats.net.client.handler.ClientDataHandler;
 import cats.net.core.Core;
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
+import cats.net.core.connection.utils.ConnectionUtils;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
 import java.io.EOFException;
@@ -56,11 +57,7 @@ public abstract class AbstractNonBlockingClient extends AbstractClient{
         if(data == null)
             return false;
         final Buffer buf = new BufferBuilder().putBytes(data.toBuffer().array()).create();
-        final ByteBuffer buffer = buf.toByteBuffer();
-        int count = 0;
-        while(buffer.hasRemaining())
-            count += channel.write(buffer);
-        return count == buffer.capacity();
+        return ConnectionUtils.write(channel, buf);
     }
 
     protected void read() throws Exception{

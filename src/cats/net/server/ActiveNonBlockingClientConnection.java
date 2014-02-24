@@ -3,6 +3,7 @@ package cats.net.server;
 import cats.net.core.Core;
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
+import cats.net.core.connection.utils.ConnectionUtils;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
 import cats.net.server.handler.ServerDataHandler;
@@ -25,11 +26,7 @@ final class ActiveNonBlockingClientConnection extends ActiveClientConnection{
     public boolean send(final Data data){
         try{
             final Buffer buf = new BufferBuilder().putBytes(data.toBuffer().array()).create();
-            final ByteBuffer buffer = buf.toByteBuffer();
-            int count = 0;
-            while(buffer.hasRemaining())
-                count += channel.write(buffer);
-            return count == buffer.capacity();
+            return ConnectionUtils.write(channel, buf);
         }catch(Exception ex){
             CoreUtils.print(ex);
             spot.disconnect(this);

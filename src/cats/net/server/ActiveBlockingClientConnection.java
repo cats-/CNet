@@ -31,8 +31,7 @@ final class ActiveBlockingClientConnection extends ActiveClientConnection implem
     public boolean send(final Data data){
         try{
             final Buffer buf = new BufferBuilder().putBytes(data.toBuffer().array()).create();
-            out.write(buf.array());
-            return true;
+            return ConnectionUtils.write(out, buf);
         }catch(Exception ex){
             CoreUtils.print(ex);
             spot.disconnect(this);

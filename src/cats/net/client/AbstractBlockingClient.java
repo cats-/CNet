@@ -55,8 +55,7 @@ public abstract class AbstractBlockingClient extends AbstractClient{
         if(data == null)
             return false;
         final Buffer buf = new BufferBuilder().putBytes(data.toBuffer().array()).create();
-        out.write(buf.array());
-        return true;
+        return ConnectionUtils.write(out, buf);
     }
 
     protected void read() throws Exception{
