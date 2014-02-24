@@ -30,7 +30,7 @@ final class ActiveNonBlockingClientConnection extends ActiveClientConnection{
             return ConnectionUtils.write(channel, buf);
         }catch(Exception ex){
             CoreUtils.print(ex);
-            spot.disconnect(this);
+            disconnect();
             return false;
         }
     }

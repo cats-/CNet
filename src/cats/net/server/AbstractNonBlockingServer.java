@@ -117,8 +117,7 @@ public abstract class AbstractNonBlockingServer extends AbstractServer{
             if(key.isAcceptable())
                 accept();
             else if(key.isReadable())
-                if(!read(key))
-                    return false;
+                read(key);
         }
         return true;
     }
