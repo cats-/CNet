@@ -3,6 +3,7 @@ package cats.net.server;
 import cats.net.core.Core;
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
+import cats.net.core.connection.rsa.RSAPubKey;
 import cats.net.core.connection.utils.ConnectionUtils;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;

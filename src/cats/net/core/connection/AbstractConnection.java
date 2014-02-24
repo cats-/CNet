@@ -1,6 +1,7 @@
 package cats.net.core.connection;
 
 import cats.net.core.Core;
+import cats.net.core.connection.rsa.RSAPubKey;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.data.Data;
 import cats.net.core.data.former.DataFormer;

@@ -2,6 +2,7 @@ package cats.net.core.data;
 
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
+import cats.net.core.connection.rsa.RSAPubKey;
 import java.io.DataOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -80,6 +81,10 @@ public final class Data {
                 }
         );
         return builder.create();
+    }
+
+    public Buffer toBuffer(final RSAPubKey key){
+        return key == null ? toBuffer() : key.encryptToBuffer(toBuffer());
     }
 
     public static Data fromBuffer(final Buffer buffer){

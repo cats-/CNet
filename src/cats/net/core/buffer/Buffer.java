@@ -1,6 +1,7 @@
 package cats.net.core.buffer;
 
 import cats.net.core.Core;
+import cats.net.core.connection.rsa.RSAPrivKey;
 import cats.net.core.utils.CoreUtils;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -20,6 +21,10 @@ public final class Buffer{
 
     public byte[] array(){
         return bytes;
+    }
+
+    public byte[] array(final RSAPrivKey key){
+        return key == null ? bytes : key.decrypt(bytes);
     }
 
     public byte[] array(final int start, final int end){
