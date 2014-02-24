@@ -1,5 +1,6 @@
 package cats.net.core.connection.rsa;
 
+import cats.net.core.buffer.Buffer;
 import cats.net.core.utils.CoreUtils;
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -53,6 +54,18 @@ public class RSAPubKey {
             CoreUtils.print(ex);
             return bytes;
         }
+    }
+
+    public byte[] encrypt(final Buffer buffer){
+        return encrypt(buffer.array());
+    }
+
+    public Buffer encryptToBuffer(final byte[] bytes){
+        return Buffer.wrap(encrypt(bytes));
+    }
+
+    public Buffer encryptToBuffer(final Buffer buffer){
+        return Buffer.wrap(encrypt(buffer));
     }
 
     public PublicKey key(){

@@ -1,5 +1,6 @@
 package cats.net.core.connection.rsa;
 
+import cats.net.core.buffer.Buffer;
 import cats.net.core.utils.CoreUtils;
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -53,6 +54,18 @@ public class RSAPrivKey {
             CoreUtils.print(ex);
             return bytes;
         }
+    }
+
+    public byte[] decrypt(final Buffer buffer){
+        return decrypt(buffer.array());
+    }
+
+    public Buffer decryptToBuffer(final byte[] bytes){
+        return Buffer.wrap(decrypt(bytes));
+    }
+
+    public Buffer decryptToBuffer(final Buffer buffer){
+        return Buffer.wrap(decrypt(buffer));
     }
 
     public PrivateKey key(){
