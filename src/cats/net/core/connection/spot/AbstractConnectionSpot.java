@@ -145,7 +145,6 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
                     break;
             }catch(Exception ex){
                 CoreUtils.print(ex);
-                break;
             }
         }
         fireOnFinish();
