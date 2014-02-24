@@ -52,8 +52,6 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
         addHandler(opcode, (AbstractDataHandler)handler);
     }
 
-    abstract boolean disconnect(final ActiveClientConnection connection);
-
     public void sendToAll(final Data... datas){
         getConnected().forEach(c -> Arrays.stream(datas).forEach(c::send));
     }
@@ -96,4 +94,7 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
     }
 
     public abstract Collection<ActiveClientConnection> getConnected();
+
+    abstract boolean disconnect(final ActiveClientConnection connection);
+
 }
