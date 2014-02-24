@@ -73,6 +73,7 @@ public abstract class AbstractNonBlockingClient extends AbstractClient{
             CoreUtils.print("received data with opcode %d", data.opcode);
             if(data.opcode == Short.MIN_VALUE){
                 initRSAKey(data.get("mod", BigInteger.class), data.get("exp", BigInteger.class));
+                bytes = buf.getBytes();
                 continue;
             }
             final ClientDataHandler handler = (ClientDataHandler)handlers.get(data.opcode);
