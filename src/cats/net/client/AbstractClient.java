@@ -24,6 +24,7 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
     }
 
     void initRSAKey(final BigInteger mod, final BigInteger exp){
+        CoreUtils.print("Initialising RSA: mod: %s exp: %s", mod, exp);
         key = new RSAPubKey(mod, exp);
     }
 
