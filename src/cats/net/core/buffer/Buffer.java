@@ -6,7 +6,6 @@ import cats.net.core.utils.CoreUtils;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public final class Buffer{
 
@@ -25,10 +24,6 @@ public final class Buffer{
 
     public byte[] array(final RSAPrivKey key){
         return key == null ? bytes : key.decrypt(bytes);
-    }
-
-    public byte[] array(final int start, final int end){
-        return Arrays.copyOfRange(bytes, start, end);
     }
 
     public int size(){
