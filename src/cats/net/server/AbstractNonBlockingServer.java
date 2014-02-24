@@ -101,7 +101,7 @@ public abstract class AbstractNonBlockingServer extends AbstractServer{
     }
 
     public boolean isConnected(){
-        return channel.isOpen() || channel.socket().isBound();
+        return channel != null && (channel.isOpen() || channel.socket().isBound());
     }
 
     protected boolean canLoop(){

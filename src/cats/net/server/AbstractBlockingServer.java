@@ -57,7 +57,7 @@ public abstract class AbstractBlockingServer extends AbstractServer{
     }
 
     public boolean isConnected(){
-        return socket.isBound();
+        return socket != null && socket.isBound();
     }
 
     protected boolean canLoop(){
