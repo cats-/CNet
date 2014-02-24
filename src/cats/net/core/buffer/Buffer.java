@@ -132,4 +132,8 @@ public final class Buffer{
     public static Buffer wrap(final byte[] bytes){
         return new Buffer(bytes);
     }
+
+    public static Buffer wrap(final byte[] bytes, final RSAPrivKey key){
+        return key.decryptToBuffer(bytes);
+    }
 }

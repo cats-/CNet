@@ -43,7 +43,8 @@ final class ActiveNonBlockingClientConnection extends ActiveClientConnection{
         final Buffer buf = Buffer.wrap(buffer.array());
         byte[] bytes = buf.getBytes();
         while(bytes.length != 0){
-            final Data data = Data.fromBuffer(Buffer.wrap(bytes));
+            final Buffer readBuf = Buffer.wrap(bytes);
+            final Data data = spot.isUsingRSA() ? Data.fromBuffer(readBuf, spot.RSAKeys().privateKey()) : Data.fromBuffer(readBuf);
             CoreUtils.print("received data with opcode %d", data.opcode);
             final ServerDataHandler handler = (ServerDataHandler)spot.getHandler(data.opcode);
             if(handler != null){

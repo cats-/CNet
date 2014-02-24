@@ -1,5 +1,6 @@
 package cats.net.server;
 
+import cats.net.core.connection.rsa.RSAKeySet;
 import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.connection.spot.event.ConnectionSpotListener;
 import cats.net.core.data.Data;
@@ -16,8 +17,28 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServer> {
 
+    public static final int RSA_SIZE = 2048;
+
+    private RSAKeySet keys;
+
     AbstractServer(final InetSocketAddress address){
         super(address);
+    }
+
+    public void initRSAKeys(final int size){
+        keys = new RSAKeySet(size);
+    }
+
+    public void initRSAKeys(){
+        initRSAKeys(RSA_SIZE);
+    }
+
+    public RSAKeySet RSAKeys(){
+        return keys;
+    }
+
+    public boolean isUsingRSA(){
+        return keys != null;
     }
 
     void fireOnJoin(final ActiveClientConnection connection){
