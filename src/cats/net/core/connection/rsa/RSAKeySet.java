@@ -34,7 +34,7 @@ public class RSAKeySet {
 
     public static Cipher newCipher(){
         try{
-            return Cipher.getInstance("RSA");
+            return Cipher.getInstance("RSA/ECB/PKCS1Padding");
         }catch(Exception ex){
             CoreUtils.print(ex);
             return null;
