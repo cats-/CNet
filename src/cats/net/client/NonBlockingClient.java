@@ -48,6 +48,8 @@ public abstract class NonBlockingClient extends AbstractClient{
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
+        if(!isConnected())
+            fireOnDisconnect();
     }
 
     public boolean isConnected(){

@@ -44,6 +44,14 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
         );
     }
 
+    void fireOnDisconnect(){
+        listeners.stream().filter(
+                l -> l instanceof ClientListener
+        ).forEach(
+                l -> ((ClientListener)l).onDisconnect(this)
+        );
+    }
+
     public void addListener(final ClientListener listener){
         addListener((ConnectionSpotListener)listener);
     }

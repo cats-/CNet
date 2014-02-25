@@ -46,6 +46,8 @@ public abstract class BlockingClient extends AbstractClient{
 
     public void disconnect(){
         ConnectionUtils.close(out, in, socket);
+        if(!isConnected())
+            fireOnDisconnect();
     }
 
     public boolean isConnected(){
