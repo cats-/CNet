@@ -63,7 +63,7 @@ public final class Buffer{
     public byte[] getBytes(){
         try{
             final int size = getInt();
-            if(size < 0)
+            if(size <= 0)
                 return new byte[0];
             final byte[] bytes = new byte[size];
             in.readFully(bytes);
