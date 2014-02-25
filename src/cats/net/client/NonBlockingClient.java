@@ -59,7 +59,7 @@ public abstract class NonBlockingClient extends AbstractClient{
     boolean send0(final Data data) throws Exception{
         if(data == null)
             return false;
-        final Buffer buf = new BufferBuilder().putBytes(data.toBuffer().array()).create(RSAKey());
+        final Buffer buf = new BufferBuilder().putBytes(data.toBuffer(RSAKey()).array()).create();
         return ConnectionUtils.write(channel, buf);
     }
 
