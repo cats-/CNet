@@ -41,7 +41,7 @@ final class NonBlockingClientConnection extends ClientConnection {
         buffer.flip();
         Buffer buf = Buffer.wrap(buffer.array());
         if(spot.isUsingRSA())
-            buf = Buffer.wrap(buf.array(spot.RSAKeys().privateKey()));
+            buf = spot.RSAKeys().privateKey().decryptToBuffer(buf);
         byte[] bytes = buf.getBytes();
         while(bytes.length != 0){
             final Buffer readBuf = Buffer.wrap(bytes);
