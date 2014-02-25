@@ -1,5 +1,6 @@
 package cats.net.core.data;
 
+import cats.net.core.Core;
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
 import cats.net.core.connection.rsa.RSAPrivKey;
@@ -7,6 +8,7 @@ import cats.net.core.connection.rsa.RSAPubKey;
 import java.io.DataOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -71,16 +73,17 @@ public final class Data {
         return get(key, String.class);
     }
 
+    public Map<String, Object> map(){
+        return map;
+    }
+
+    public int entryCount(){
+        return map.size();
+    }
+
     public Buffer toBuffer(){
         final BufferBuilder builder = new BufferBuilder();
-        builder.putShort(opcode);
-        builder.putInt(map.size());
-        map.entrySet().forEach(
-                entry -> {
-                    builder.putString(entry.getKey());
-                    builder.putObject(entry.getValue());
-                }
-        );
+        Core.getEncoder(Data.class).encode(builder, this);
         return builder.create();
     }
 
@@ -89,11 +92,7 @@ public final class Data {
     }
 
     public static Data fromBuffer(final Buffer buffer){
-        final Data data = new Data(buffer.getShort());
-        IntStream.range(0, buffer.getInt()).forEach(
-                i -> data.map.put(buffer.getString(), buffer.getObject())
-        );
-        return data;
+        return (Data) Core.getDecoder(Data.class).decode(buffer);
     }
 
     public static Data fromBuffer(final Buffer buffer, final RSAPrivKey key){

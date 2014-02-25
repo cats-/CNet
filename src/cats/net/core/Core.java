@@ -3,6 +3,7 @@ package cats.net.core;
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
 import cats.net.core.connection.utils.ConnectionUtils;
+import cats.net.core.data.Data;
 import cats.net.core.data.former.DataFormer;
 import cats.net.core.decode.Decoder;
 import cats.net.core.encode.Encoder;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -104,6 +106,25 @@ public final class Core {
         add(BigInteger.class,
                 (Encoder<BigInteger>) (bldr, bi) -> bldr.putString(bi.toString()),
                 (Decoder<BigInteger>) buf -> new BigInteger(buf.getString())
+        );
+        add(Data.class,
+                (Encoder<Data>) (bldr, data) -> {
+                    bldr.putShort(data.opcode);
+                    bldr.putInt(data.entryCount());
+                    data.map().entrySet().forEach(
+                            entry -> {
+                                bldr.putString(entry.getKey());
+                                bldr.putObject(entry.getValue());
+                            }
+                    );
+                },
+                (Decoder<Data>) buf -> {
+                    final Data data = new Data(buf.getShort());
+                    IntStream.range(0, buf.getInt()).forEach(
+                            i -> data.map().put(buf.getString(), buf.getObject())
+                    );
+                    return data;
+                }
         );
     }
 
