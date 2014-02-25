@@ -12,7 +12,6 @@ public class RSAPrivKey {
 
     private PrivateKey key;
     private RSAPrivateKeySpec spec;
-    private Cipher cipher;
 
     public RSAPrivKey(final KeyFactory factory, final PrivateKey key){
         this.key = key;
@@ -22,8 +21,6 @@ public class RSAPrivKey {
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
-
-        initCipher();
     }
 
     public RSAPrivKey(final BigInteger mod, final BigInteger exp){
@@ -34,22 +31,11 @@ public class RSAPrivKey {
         }catch(Exception ex){
             CoreUtils.print(ex);
         }
-
-        initCipher();
-    }
-
-    private void initCipher(){
-        try{
-            cipher = RSAKeySet.newCipher();
-            cipher.init(Cipher.DECRYPT_MODE, key);
-        }catch(Exception ex){
-            CoreUtils.print(ex);
-        }
     }
 
     public byte[] decrypt(final byte[] bytes){
         try{
-            return cipher.doFinal(bytes);
+            return new BigInteger(bytes).modPow(spec.getPrivateExponent(), spec.getModulus()).toByteArray();
         }catch(Exception ex){
             CoreUtils.print(ex);
             return bytes;
@@ -74,9 +60,5 @@ public class RSAPrivKey {
 
     public RSAPrivateKeySpec spec(){
         return spec;
-    }
-
-    public Cipher cipher(){
-        return cipher;
     }
 }
