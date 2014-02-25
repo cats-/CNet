@@ -14,21 +14,21 @@ import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public abstract class AbstractBlockingClient extends AbstractClient{
+public abstract class BlockingClient extends AbstractClient{
 
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
 
-    protected AbstractBlockingClient(final InetSocketAddress address){
+    protected BlockingClient(final InetSocketAddress address){
         super(address);
     }
 
-    protected AbstractBlockingClient(final String host, final int port){
+    protected BlockingClient(final String host, final int port){
         this(new InetSocketAddress(host, port));
     }
 
-    protected AbstractBlockingClient(final int port){
+    protected BlockingClient(final int port){
         this("localhost", port);
     }
 

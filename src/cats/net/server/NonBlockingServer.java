@@ -1,7 +1,5 @@
 package cats.net.server;
 
-import cats.net.core.connection.rsa.RSAPubKey;
-import cats.net.core.connection.utils.ConnectionUtils;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
 import java.net.InetSocketAddress;
@@ -16,28 +14,28 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public abstract class AbstractNonBlockingServer extends AbstractServer{
+public abstract class NonBlockingServer extends AbstractServer{
 
     private Selector selector;
     private ServerSocketChannel channel;
 
-    private final Map<SelectionKey, ActiveNonBlockingClientConnection> connected;
+    private final Map<SelectionKey, NonBlockingClientConnection> connected;
 
-    protected AbstractNonBlockingServer(final InetSocketAddress address){
+    protected NonBlockingServer(final InetSocketAddress address){
         super(address);
 
         connected = new HashMap<>();
     }
 
-    protected AbstractNonBlockingServer(final String host, final int port){
+    protected NonBlockingServer(final String host, final int port){
         this(new InetSocketAddress(host, port));
     }
 
-    protected AbstractNonBlockingServer(final int port){
+    protected NonBlockingServer(final int port){
         this("localhost", port);
     }
 
-    public Collection<ActiveClientConnection> getConnected(){
+    public Collection<ClientConnection> getConnected(){
         return Collections.unmodifiableCollection(connected.values());
     }
 
@@ -54,7 +52,7 @@ public abstract class AbstractNonBlockingServer extends AbstractServer{
             final SocketChannel client = channel.accept();
             client.configureBlocking(false);
             final SelectionKey key = client.register(selector, SelectionKey.OP_READ);
-            final ActiveNonBlockingClientConnection connection = new ActiveNonBlockingClientConnection(this, key, client);
+            final NonBlockingClientConnection connection = new NonBlockingClientConnection(this, key, client);
             connected.put(key, connection);
             if(isUsingRSA()){
                 final RSAPublicKeySpec pub = RSAKeys().publicKey().spec();
@@ -67,7 +65,7 @@ public abstract class AbstractNonBlockingServer extends AbstractServer{
         }
     }
 
-    boolean disconnect(final ActiveClientConnection connection){
+    boolean disconnect(final ClientConnection connection){
         if(connection == null)
             return false;
         final SelectionKey key = connected.keySet().stream().filter(
@@ -81,7 +79,7 @@ public abstract class AbstractNonBlockingServer extends AbstractServer{
     }
 
     private boolean read(final SelectionKey key){
-        final ActiveNonBlockingClientConnection connection = connected.get(key);
+        final NonBlockingClientConnection connection = connected.get(key);
         try{
             connection.read();
             return true;

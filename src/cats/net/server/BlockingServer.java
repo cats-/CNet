@@ -11,31 +11,31 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AbstractBlockingServer extends AbstractServer{
+public abstract class BlockingServer extends AbstractServer{
 
     private ServerSocket socket;
 
-    private final List<ActiveBlockingClientConnection> connections;
+    private final List<BlockingClientConnection> connections;
 
-    protected AbstractBlockingServer(final InetSocketAddress address){
+    protected BlockingServer(final InetSocketAddress address){
         super(address);
 
         connections = new LinkedList<>();
     }
 
-    protected AbstractBlockingServer(final String host, final int port){
+    protected BlockingServer(final String host, final int port){
         this(new InetSocketAddress(host, port));
     }
 
-    protected AbstractBlockingServer(final int port){
+    protected BlockingServer(final int port){
         this("localhost", port);
     }
 
-    public Collection<ActiveClientConnection> getConnected(){
+    public Collection<ClientConnection> getConnected(){
         return Collections.unmodifiableList(connections);
     }
 
-    boolean disconnect(final ActiveClientConnection connection){
+    boolean disconnect(final ClientConnection connection){
         if(connection == null || !connections.contains(connection))
             return false;
         connections.remove(connection);
@@ -66,7 +66,7 @@ public abstract class AbstractBlockingServer extends AbstractServer{
 
     protected boolean loop() throws Exception{
         final Socket client = socket.accept();
-        final ActiveBlockingClientConnection connection = new ActiveBlockingClientConnection(this, client);
+        final BlockingClientConnection connection = new BlockingClientConnection(this, client);
         connections.add(connection);
         if(isUsingRSA()){
             final RSAPublicKeySpec pub = RSAKeys().publicKey().spec();

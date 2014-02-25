@@ -3,7 +3,6 @@ package cats.net.server;
 import cats.net.core.Core;
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
-import cats.net.core.connection.rsa.RSAPubKey;
 import cats.net.core.connection.utils.ConnectionUtils;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
@@ -13,14 +12,14 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.net.Socket;
 
-final class ActiveBlockingClientConnection extends ActiveClientConnection implements Runnable{
+final class BlockingClientConnection extends ClientConnection implements Runnable{
 
     private final Socket socket;
 
     private final DataOutputStream out;
     private final DataInputStream in;
 
-    ActiveBlockingClientConnection(final AbstractServer server, final Socket socket){
+    BlockingClientConnection(final AbstractServer server, final Socket socket){
         super(server);
         this.socket = socket;
 

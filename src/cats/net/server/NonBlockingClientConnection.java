@@ -3,7 +3,6 @@ package cats.net.server;
 import cats.net.core.Core;
 import cats.net.core.buffer.Buffer;
 import cats.net.core.buffer.BufferBuilder;
-import cats.net.core.connection.rsa.RSAPubKey;
 import cats.net.core.connection.utils.ConnectionUtils;
 import cats.net.core.data.Data;
 import cats.net.core.utils.CoreUtils;
@@ -13,12 +12,12 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
-final class ActiveNonBlockingClientConnection extends ActiveClientConnection{
+final class NonBlockingClientConnection extends ClientConnection {
 
     private final SelectionKey key;
     private final SocketChannel channel;
 
-    ActiveNonBlockingClientConnection(final AbstractServer server, final SelectionKey key, final SocketChannel channel){
+    NonBlockingClientConnection(final AbstractServer server, final SelectionKey key, final SocketChannel channel){
         super(server);
         this.key = key;
         this.channel = channel;

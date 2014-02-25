@@ -16,20 +16,20 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
-public abstract class AbstractNonBlockingClient extends AbstractClient{
+public abstract class NonBlockingClient extends AbstractClient{
 
     private Selector selector;
     private SocketChannel channel;
 
-    protected AbstractNonBlockingClient(final InetSocketAddress address){
+    protected NonBlockingClient(final InetSocketAddress address){
         super(address);
     }
 
-    protected AbstractNonBlockingClient(final String host, final int port){
+    protected NonBlockingClient(final String host, final int port){
         this(new InetSocketAddress(host, port));
     }
 
-    protected AbstractNonBlockingClient(final int port){
+    protected NonBlockingClient(final int port){
         this("localhost", port);
     }
 

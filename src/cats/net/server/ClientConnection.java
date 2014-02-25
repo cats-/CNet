@@ -2,9 +2,9 @@ package cats.net.server;
 
 import cats.net.core.connection.AbstractConnection;
 
-public abstract class ActiveClientConnection extends AbstractConnection<AbstractServer>{
+public abstract class ClientConnection extends AbstractConnection<AbstractServer>{
 
-    ActiveClientConnection(final AbstractServer server){
+    ClientConnection(final AbstractServer server){
         super(server);
     }
 

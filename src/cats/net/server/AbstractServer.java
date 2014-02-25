@@ -44,7 +44,7 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
         return keys != null;
     }
 
-    void fireOnJoin(final ActiveClientConnection connection){
+    void fireOnJoin(final ClientConnection connection){
         listeners.stream().filter(
                 l -> l instanceof ServerListener
         ).forEach(
@@ -52,7 +52,7 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
         );
     }
 
-    void fireOnLeave(final ActiveClientConnection connection){
+    void fireOnLeave(final ClientConnection connection){
         listeners.stream().filter(
                 l -> l instanceof ServerListener
         ).forEach(
@@ -88,19 +88,19 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
         sendToAll((short) opcode, args);
     }
 
-    public void sendToAllExcept(final ActiveClientConnection exception, final Data... datas){
+    public void sendToAllExcept(final ClientConnection exception, final Data... datas){
         getFilteredConnections(exception).forEach(c -> Arrays.stream(datas).forEach(c::send));
     }
 
-    public void sendToAllExcept(final Data data, final ActiveClientConnection... exceptions){
+    public void sendToAllExcept(final Data data, final ClientConnection... exceptions){
         getFilteredConnections(exceptions).forEach(c -> c.send(data));
     }
 
-    public void sendToAllExcept(final ActiveClientConnection exception, final short opcode, final Object... args){
+    public void sendToAllExcept(final ClientConnection exception, final short opcode, final Object... args){
         getFilteredConnections(exception).forEach(c -> c.send(opcode, args));
     }
 
-    public void sendToAllExcept(final ActiveClientConnection exception, final int opcode, final Object... args){
+    public void sendToAllExcept(final ClientConnection exception, final int opcode, final Object... args){
         sendToAllExcept(exception, (short)opcode, args);
     }
 
@@ -108,17 +108,17 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
         return getConnected().stream().filter(c -> c != null).map(c -> (J)c).collect(Collectors.toList());
     }
 
-    public List<ActiveClientConnection> getFilteredConnections(final ActiveClientConnection... clientConnections){
-        final List<ActiveClientConnection> connections = Arrays.asList(clientConnections);
+    public List<ClientConnection> getFilteredConnections(final ClientConnection... clientConnections){
+        final List<ClientConnection> connections = Arrays.asList(clientConnections);
         return getConnected().stream().filter(c -> !connections.contains(c)).collect(Collectors.toList());
     }
 
-    public ActiveClientConnection getConnectionByAttachment(final Object attachment){
+    public ClientConnection getConnectionByAttachment(final Object attachment){
         return getConnected().stream().filter(c -> Objects.equals(c.attachment(), attachment)).findFirst().orElse(null);
     }
 
-    public abstract Collection<ActiveClientConnection> getConnected();
+    public abstract Collection<ClientConnection> getConnected();
 
-    abstract boolean disconnect(final ActiveClientConnection connection);
+    abstract boolean disconnect(final ClientConnection connection);
 
 }
