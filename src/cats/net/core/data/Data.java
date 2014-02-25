@@ -37,6 +37,10 @@ public final class Data {
         return clazz.cast(map.get(key));
     }
 
+    public Object get(final String key){
+        return map.get(key);
+    }
+
     public Boolean getBoolean(final String key){
         return get(key, Boolean.class);
     }
