@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -64,6 +65,7 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
     public void addHandler(final AbstractDataHandler<T> handler){
         for(final short s : handler.getOpcodes())
             handlers.put(s, handler);
+        CoreUtils.print("Registered handler %s with opcodes: %s", handler.getClass(), Arrays.toString(handler.getOpcodes()));
     }
 
     public AbstractDataHandler<T> getHandler(final short opcode){
