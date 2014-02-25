@@ -68,14 +68,9 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
         addListener((ConnectionSpotListener)listener);
     }
 
-    public void addHandler(final short opcode, final ServerDataHandler handler){
-        addHandler(opcode, (AbstractDataHandler)handler);
+    public void addHandler(final ServerDataHandler handler){
+        addHandler((AbstractDataHandler)handler);
     }
-
-    public void addHandler(final int opcode, final ServerDataHandler handler){
-        addHandler(opcode, (AbstractDataHandler)handler);
-    }
-
     public void sendToAll(final Data... datas){
         getConnected().forEach(c -> Arrays.stream(datas).forEach(c::send));
     }

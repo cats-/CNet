@@ -52,12 +52,8 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
         addListener((ConnectionSpotListener)listener);
     }
 
-    public void addHandler(final short opcode, final ClientDataHandler handler){
-        addHandler(opcode, (AbstractDataHandler)handler);
-    }
-
-    public void addHandler(final int opcode, final ClientDataHandler handler){
-        addHandler(opcode, (AbstractDataHandler) handler);
+    public void addHandler(final ClientDataHandler handler){
+        addHandler((AbstractDataHandler)handler);
     }
 
     abstract boolean send0(final Data data) throws Exception;

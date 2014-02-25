@@ -61,13 +61,9 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
         listeners.clear();
     }
 
-    public void addHandler(final short opcode, final AbstractDataHandler<T> handler){
-        handlers.put(opcode, handler);
-        CoreUtils.print("Registered handler %s at opcode %d", handler.getClass(), opcode);
-    }
-
-    public void addHandler(final int opcode, final AbstractDataHandler<T> handler){
-        addHandler((short)opcode, handler);
+    public void addHandler(final AbstractDataHandler<T> handler){
+        for(final short s : handler.getOpcodes())
+            handlers.put(s, handler);
     }
 
     public AbstractDataHandler<T> getHandler(final short opcode){
@@ -89,21 +85,9 @@ public abstract class AbstractConnectionSpot<T extends AbstractConnectionSpot> e
                 final Node node = handlers.item(i);
                 if(node.getNodeType() != Node.ELEMENT_NODE)
                     continue;
-                final Element element = (Element)node;
-                int opcode = 0;
-                final String opcodeValue = element.getAttribute("opcode");
-                try{
-                    opcode = Integer.parseInt(opcodeValue);
-                }catch(Exception ex){
-                    final int idx = opcodeValue.lastIndexOf('.');
-                    final Class clazz = Class.forName(opcodeValue.substring(0, idx));
-                    final Field field = clazz.getDeclaredField(opcodeValue.substring(idx+1));
-                    if(!field.isAccessible())
-                        field.setAccessible(true);
-                    opcode = field.getType().equals(short.class) ? field.getShort(null) : field.getInt(null);
-                }
-                final Class<? extends AbstractDataHandler<T>> clazz = (Class<? extends AbstractDataHandler<T>>)Class.forName(element.getAttribute("class"));
-                addHandler(opcode, clazz.newInstance());
+                final Element e = (Element)node;
+                final Class<? extends AbstractDataHandler<T>> clazz = (Class<? extends AbstractDataHandler<T>>)Class.forName(e.getTextContent());
+                addHandler(clazz.newInstance());
             }
             ConnectionUtils.close(input);
             return true;
