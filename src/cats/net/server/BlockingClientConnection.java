@@ -43,12 +43,12 @@ final class BlockingClientConnection extends ClientConnection implements Runnabl
         final byte[] buffer = new byte[Core.bufferSize];
         if(in.read(buffer) < 0)
             throw new EOFException();
-        final Buffer buf = Buffer.wrap(buffer);
+        Buffer buf = Buffer.wrap(buffer);
+        if(spot.isUsingRSA())
+            buf = Buffer.wrap(buf.array(spot.RSAKeys().privateKey()));
         byte[] bytes = buf.getBytes();
         while(bytes.length != 0){
-            Buffer readBuf = Buffer.wrap(bytes);
-            if(spot.isUsingRSA())
-                readBuf = Buffer.wrap(readBuf.array(spot.RSAKeys().privateKey()));
+            final Buffer readBuf = Buffer.wrap(bytes);
             final Data data = Data.fromBuffer(readBuf);
             CoreUtils.print("received data with opcode %d", data.opcode);
             final ServerDataHandler handler = (ServerDataHandler)spot.getHandler(data.opcode);
