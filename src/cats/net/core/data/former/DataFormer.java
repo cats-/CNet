@@ -23,7 +23,7 @@ public abstract class DataFormer {
 
     public final Data form(final short opcode, final Object... args){
         try{
-           final Method method = Arrays.stream(getClass().getMethods()).filter(
+           final Method method = Arrays.stream(getClass().getDeclaredMethods()).filter(
                    m -> m.isAnnotationPresent(Former.class)
                            && matches(args, m.getParameterTypes())
                            && m.getReturnType().equals(Data.class)
@@ -47,6 +47,7 @@ public abstract class DataFormer {
 
     private static boolean matches(final Object[] args, final Class[] paramTypes){
         final Class[] argTypes = types(args);
+        CoreUtils.print("Argtypes: %s | ParamTypes: %s", Arrays.toString(argTypes), Arrays.toString(paramTypes));
         if(Arrays.equals(argTypes, paramTypes))
             return true;
         for(int i = 0; i < argTypes.length; i++)
