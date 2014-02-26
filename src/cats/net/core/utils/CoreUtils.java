@@ -7,7 +7,7 @@ public final class CoreUtils {
     private CoreUtils(){}
 
     public static synchronized void print(final Exception ex){
-        if(Core.verbose)
+        if(Core.verboseExceptions)
             ex.printStackTrace();
     }
 

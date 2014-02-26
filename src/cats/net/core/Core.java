@@ -36,6 +36,7 @@ public final class Core {
     private static final Map<Short, DataFormer> DATA_FORMERS = new HashMap<>();
 
     public static boolean verbose = true;
+    public static boolean verboseExceptions = false;
 
     public static int bufferSize = 1024;
 
