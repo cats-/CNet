@@ -23,7 +23,7 @@ public abstract class DataFormer {
 
     public final Data form(final short opcode, final Object... args){
         try{
-           final Method method = Arrays.stream(getClass().getDeclaredMethods()).filter(
+           final Method method = Arrays.stream(getClass().getMethods()).filter(
                    m -> m.isAnnotationPresent(Former.class)
                            && matches(args, m.getParameterTypes())
                            && m.getReturnType().equals(Data.class)
@@ -43,10 +43,6 @@ public abstract class DataFormer {
 
     private static Class[] types(final Object... args){
         return Arrays.stream(args).map(Object::getClass).collect(Collectors.toList()).toArray(new Class[args.length]);
-        /*final Class[] types = new Class[args.length];
-        for(int i = 0; i < args.length; i++)
-            types[i] = args[i].getClass();
-        return types;*/
     }
 
     private static boolean matches(final Object[] args, final Class[] paramTypes){
