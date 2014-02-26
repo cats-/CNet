@@ -22,7 +22,7 @@ public abstract class DataFormer {
 
     public abstract short[] getOpcodes();
 
-    public final Data form(final short opcode, final Object[] args){
+    public final Data form(final short opcode, final Object... args){
         final Object[] realArgs = realArgs(args);
         final Class[] argTypes = types(realArgs);
         try{
