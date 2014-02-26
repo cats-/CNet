@@ -40,10 +40,11 @@ public abstract class DataFormer {
     }
 
     private static Class[] types(final Object... args){
-        final Class[] types = new Class[args.length];
+        return (Class[])Arrays.stream(args).map(Object::getClass).toArray();
+        /*final Class[] types = new Class[args.length];
         for(int i = 0; i < args.length; i++)
             types[i] = args[i].getClass();
-        return types;
+        return types;*/
     }
 
     private static boolean matches(final Object[] args, final Class[] paramTypes){
