@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class DataFormer {
@@ -21,7 +22,7 @@ public abstract class DataFormer {
 
     public abstract short[] getOpcodes();
 
-    public final Data form(final short opcode, final Object... args){
+    public final Data form(final short opcode, final Object[] args){
         try{
            final Method method = Arrays.stream(getClass().getDeclaredMethods()).filter(
                    m -> m.isAnnotationPresent(Former.class)
