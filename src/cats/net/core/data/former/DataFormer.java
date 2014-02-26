@@ -22,11 +22,12 @@ public abstract class DataFormer {
 
     public abstract short[] getOpcodes();
 
-    public final Data form(final short opcode, final Object[] args){
+    public final Data form(final short opcode, final Object... args){
+        final Object[] realArgs = realArgs(args);
         try{
            final Method method = Arrays.stream(getClass().getDeclaredMethods()).filter(
                    m -> m.isAnnotationPresent(Former.class)
-                           && matches(args, m.getParameterTypes())
+                           && matches(realArgs, m.getParameterTypes())
                            && m.getReturnType().equals(Data.class)
            ).findFirst().orElse(null);
             CoreUtils.print("data former method for opcode %d: %s", opcode, method);
@@ -42,7 +43,18 @@ public abstract class DataFormer {
         }
     }
 
-    private static Class[] types(final Object... args){
+    private static Object[] realArgs(final Object... args){
+        final List<Object> list = new ArrayList<>();
+        for(final Object arg : args){
+            if(arg instanceof Object[])
+                list.addAll(Arrays.asList(realArgs(arg)));
+            else
+                list.add(arg);
+        }
+        return list.toArray();
+    }
+
+    private static Class[] types(final Object[] args){
         return Arrays.stream(args).map(Object::getClass).collect(Collectors.toList()).toArray(new Class[args.length]);
     }
 
