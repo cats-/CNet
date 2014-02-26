@@ -7,7 +7,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public abstract class DataFormer {
 
@@ -40,7 +42,7 @@ public abstract class DataFormer {
     }
 
     private static Class[] types(final Object... args){
-        return (Class[])Arrays.stream(args).map(Object::getClass).toArray();
+        return Arrays.stream(args).map(Object::getClass).collect(Collectors.toList()).toArray(new Class[args.length]);
         /*final Class[] types = new Class[args.length];
         for(int i = 0; i < args.length; i++)
             types[i] = args[i].getClass();
