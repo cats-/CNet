@@ -12,6 +12,8 @@ public final class CoreUtils {
     }
 
     public static synchronized void print(final String format, final Object... args){
+        if(!Core.verbose)
+            return;
         final String name = Thread.currentThread().getStackTrace()[2].getClassName();
         System.out.printf("[%s] %s\n", name, String.format(format, args));
     }
