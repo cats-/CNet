@@ -29,7 +29,8 @@ public final class Data {
     }
 
     public Data put(final String key, final Object value){
-        map.put(key, value);
+        if(value != null)
+            map.put(key, value);
         return this;
     }
 
