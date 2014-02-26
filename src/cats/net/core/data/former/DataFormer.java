@@ -22,7 +22,7 @@ public abstract class DataFormer {
 
     public abstract short[] getOpcodes();
 
-    public final Data form(final short opcode, final Object... args){
+    public final Data form(final short opcode, final Object[] args){
         final Object[] realArgs = realArgs(args);
         try{
            final Method method = Arrays.stream(getClass().getDeclaredMethods()).filter(
@@ -43,11 +43,11 @@ public abstract class DataFormer {
         }
     }
 
-    private static Object[] realArgs(final Object... args){
+    private static Object[] realArgs(final Object[] args){
         final List<Object> list = new ArrayList<>();
         for(final Object arg : args){
             if(arg instanceof Object[])
-                list.addAll(Arrays.asList(realArgs(arg)));
+                list.addAll(Arrays.asList(realArgs((Object[])arg)));
             else
                 list.add(arg);
         }
