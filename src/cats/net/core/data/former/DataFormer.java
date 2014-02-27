@@ -37,7 +37,7 @@ public abstract class DataFormer {
            if(!method.isAccessible())
                method.setAccessible(true);
             data = new Data(opcode);
-            return (Data)method.invoke(this, args);
+            return (Data)method.invoke(this, realArgs);
         }catch(Exception ex){
             CoreUtils.print(ex);
             return null;
