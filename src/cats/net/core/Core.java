@@ -73,17 +73,17 @@ public final class Core {
                     final int width = img.getWidth();
                     final int height = img.getHeight();
                     bldr.putInt(width).putInt(height).putInt(img.getType());
-                    for(int r = 0; r < height; r++)
-                        for(int c = 0; c < width; c++)
-                            bldr.putInt(img.getRGB(r, c));
+                    for(int x = 0; x < width; x++)
+                        for(int y = 0; y < height; y++)
+                            bldr.putInt(img.getRGB(x, y));
                 },
                 (Decoder<BufferedImage>) buf -> {
                     final int width = buf.getInt();
                     final int height = buf.getInt();
                     final BufferedImage img = new BufferedImage(width, height, buf.getInt());
-                    for(int r = 0; r < height; r++)
-                        for(int c = 0; c < width; c++)
-                            img.setRGB(r, c, buf.getInt());
+                    for(int x = 0; x < width; x++)
+                        for(int y = 0; y < height; y++)
+                            img.setRGB(x, y, buf.getInt());
                     return img;
                 }
         );
