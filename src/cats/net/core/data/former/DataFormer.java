@@ -64,7 +64,7 @@ public abstract class DataFormer {
         if(Arrays.equals(argTypes, paramTypes))
             return true;
         for(int i = 0; i < argTypes.length; i++)
-            if(!argTypes[i].isAssignableFrom(paramTypes[i]))
+            if(!paramTypes[i].isAssignableFrom(argTypes[i]))
                 return false;
         return true;
     }
