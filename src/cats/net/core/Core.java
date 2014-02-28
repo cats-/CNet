@@ -12,10 +12,14 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,6 +51,9 @@ public final class Core {
         add(Byte.class,
                 (Encoder<Byte>) BufferBuilder::putByte,
                 (Decoder<Byte>) Buffer::getByte);
+        add(byte[].class,
+                (Encoder<byte[]>) BufferBuilder::putBytes,
+                (Decoder<byte[]>) Buffer::getBytes);
         add(Character.class,
                 (Encoder<Character>) BufferBuilder::putChar,
                 (Decoder<Character>) Buffer::getChar);
@@ -107,6 +114,33 @@ public final class Core {
         add(BigInteger.class,
                 (Encoder<BigInteger>) (bldr, bi) -> bldr.putString(bi.toString()),
                 (Decoder<BigInteger>) buf -> new BigInteger(buf.getString())
+        );
+        add(File.class,
+                (Encoder<File>) (bldr, file) -> {
+                    bldr.putString(file.getName());
+                    try{
+                        final byte[] bytes = Files.readAllBytes(file.toPath());
+                        bldr.putBoolean(true);
+                        bldr.putBytes(bytes);
+                    }catch(Exception ex){
+                        bldr.putBoolean(false);
+                    }
+                },
+                (Decoder<File>) buf -> {
+                    final String full = buf.getString();
+                    if(!buf.getBoolean())
+                        return null;
+                    final int i = full.lastIndexOf('.');
+                    final String name = full.substring(0, i);
+                    final String extension = full.substring(i+1);
+                    try{
+                       final File file = File.createTempFile(name, extension);
+                       Files.write(file.toPath(), buf.getBytes());
+                        return file;
+                    }catch(Exception ex){
+                        return null;
+                    }
+                }
         );
         add(Data.class,
                 (Encoder<Data>) (bldr, data) -> {
