@@ -1,4 +1,4 @@
-package cats.net.core.decode;
+package cats.net.core.codec;
 
 import cats.net.core.buffer.Buffer;
 
