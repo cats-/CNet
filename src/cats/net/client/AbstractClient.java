@@ -18,9 +18,21 @@ import java.net.InetSocketAddress;
 public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClient>{
 
     private RSAPubKey key;
+    protected ClientDataHandler<AbstractClient> defaultHandler;
 
     AbstractClient(final InetSocketAddress address){
         super(address);
+
+        defaultHandler = new ClientDataHandler<AbstractClient>() {
+
+            public void handle(AbstractClient client, Data data) {
+                CoreUtils.print("(%s) received data with opcode %d", client, data);
+            }
+
+            public short[] getOpcodes(){
+                return new short[0];
+            }
+        };
     }
 
     void initRSAKey(final BigInteger mod, final BigInteger exp){

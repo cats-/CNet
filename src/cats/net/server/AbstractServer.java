@@ -5,6 +5,7 @@ import cats.net.core.connection.spot.AbstractConnectionSpot;
 import cats.net.core.connection.spot.event.ConnectionSpotListener;
 import cats.net.core.data.Data;
 import cats.net.core.data.handler.AbstractDataHandler;
+import cats.net.core.utils.CoreUtils;
 import cats.net.server.event.ServerListener;
 import cats.net.server.event.ServerStateListener;
 import cats.net.server.handler.ServerDataHandler;
@@ -20,9 +21,29 @@ public abstract class AbstractServer extends AbstractConnectionSpot<AbstractServ
     public static final int RSA_SIZE = 1024;
 
     private RSAKeySet keys;
+    protected ServerDataHandler<AbstractServer> defaultHandler;
 
     AbstractServer(final InetSocketAddress address){
         super(address);
+
+        defaultHandler = new ServerDataHandler<AbstractServer>(){
+
+            public void handle(AbstractServer server, ClientConnection connection, Data data){
+                CoreUtils.print("(%s) received data from %s with opcode %d", server, connection, data);
+            }
+
+            public short[] getOpcodes() {
+                return new short[0];
+            }
+        };
+    }
+
+    public void setDefaultHandler(final ServerDataHandler<AbstractServer> defaultHandler){
+        this.defaultHandler = defaultHandler;
+    }
+
+    public ServerDataHandler<AbstractServer> getDefaultHandler(){
+        return defaultHandler;
     }
 
     public final boolean initRSAKeys(final int size){

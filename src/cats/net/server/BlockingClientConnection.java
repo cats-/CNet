@@ -62,6 +62,16 @@ final class BlockingClientConnection extends ClientConnection implements Runnabl
                         CoreUtils.print(new Exception("error handling exception " + e.getMessage(), e));
                     }
                 }
+            }else if(spot.defaultHandler != null){
+                try{
+                    spot.defaultHandler.handle(spot, this, data);
+                }catch(Exception ex){
+                    try{
+                        spot.defaultHandler.handleException(spot, this, data, ex);
+                    }catch(Exception e){
+                        CoreUtils.print(new Exception("default handler: error handling exception " + e.getMessage(), e));
+                    }
+                }
             }
             bytes = buf.getBytes();
         }
