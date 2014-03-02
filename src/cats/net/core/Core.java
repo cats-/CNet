@@ -12,14 +12,11 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,104 +42,104 @@ public final class Core {
     public static int bufferSize = 1024;
 
     static{
-        add(Boolean.class,
+        addCodec(Boolean.class,
                 (Encoder<Boolean>) BufferBuilder::putBoolean,
                 (Decoder<Boolean>) Buffer::getBoolean);
-        add(Byte.class,
+        addCodec(Byte.class,
                 (Encoder<Byte>) BufferBuilder::putByte,
                 (Decoder<Byte>) Buffer::getByte);
-        add(byte[].class,
+        addCodec(byte[].class,
                 (Encoder<byte[]>) BufferBuilder::putBytes,
                 (Decoder<byte[]>) Buffer::getBytes);
-        add(Character.class,
+        addCodec(Character.class,
                 (Encoder<Character>) BufferBuilder::putChar,
                 (Decoder<Character>) Buffer::getChar);
-        add(Short.class,
+        addCodec(Short.class,
                 (Encoder<Short>) BufferBuilder::putShort,
                 (Decoder<Short>) Buffer::getShort);
-        add(Integer.class,
+        addCodec(Integer.class,
                 (Encoder<Integer>) BufferBuilder::putInt,
                 (Decoder<Integer>) Buffer::getInt);
-        add(Float.class,
+        addCodec(Float.class,
                 (Encoder<Float>) BufferBuilder::putFloat,
                 (Decoder<Float>) Buffer::getFloat);
-        add(Double.class,
+        addCodec(Double.class,
                 (Encoder<Double>) BufferBuilder::putDouble,
                 (Decoder<Double>) Buffer::getDouble);
-        add(Long.class,
+        addCodec(Long.class,
                 (Encoder<Long>) BufferBuilder::putLong,
                 (Decoder<Long>) Buffer::getLong);
-        add(String.class,
+        addCodec(String.class,
                 (Encoder<String>) BufferBuilder::putString,
                 (Decoder<String>) Buffer::getString);
-        add(BufferedImage.class,
+        addCodec(BufferedImage.class,
                 (Encoder<BufferedImage>) (bldr, img) -> {
                     final int width = img.getWidth();
                     final int height = img.getHeight();
                     bldr.putInt(width).putInt(height).putInt(img.getType());
-                    for(int x = 0; x < width; x++)
-                        for(int y = 0; y < height; y++)
+                    for (int x = 0; x < width; x++)
+                        for (int y = 0; y < height; y++)
                             bldr.putInt(img.getRGB(x, y));
                 },
                 (Decoder<BufferedImage>) buf -> {
                     final int width = buf.getInt();
                     final int height = buf.getInt();
                     final BufferedImage img = new BufferedImage(width, height, buf.getInt());
-                    for(int x = 0; x < width; x++)
-                        for(int y = 0; y < height; y++)
+                    for (int x = 0; x < width; x++)
+                        for (int y = 0; y < height; y++)
                             img.setRGB(x, y, buf.getInt());
                     return img;
                 }
         );
-        add(Color.class,
+        addCodec(Color.class,
                 (Encoder<Color>) (bldr, col) -> bldr.putInt(col.getRGB()),
                 (Decoder<Color>) buf -> new Color(buf.getInt())
         );
-        add(Point.class,
+        addCodec(Point.class,
                 (Encoder<Point>) (bldr, pt) -> bldr.putInt(pt.x).putInt(pt.y),
                 (Decoder<Point>) buf -> new Point(buf.getInt(), buf.getInt())
         );
-        add(Rectangle.class,
+        addCodec(Rectangle.class,
                 (Encoder<Rectangle>) (bldr, rect) ->
-                    bldr.putInt(rect.x).putInt(rect.y).putInt(rect.width).putInt(rect.height),
+                        bldr.putInt(rect.x).putInt(rect.y).putInt(rect.width).putInt(rect.height),
                 (Decoder<Rectangle>) buf -> new Rectangle(buf.getInt(), buf.getInt(), buf.getInt(), buf.getInt())
         );
-        add(Date.class,
+        addCodec(Date.class,
                 (Encoder<Date>) (bldr, date) -> bldr.putLong(date.getTime()),
                 (Decoder<Date>) buf -> new Date(buf.getLong())
         );
-        add(BigInteger.class,
+        addCodec(BigInteger.class,
                 (Encoder<BigInteger>) (bldr, bi) -> bldr.putString(bi.toString()),
                 (Decoder<BigInteger>) buf -> new BigInteger(buf.getString())
         );
-        add(File.class,
+        addCodec(File.class,
                 (Encoder<File>) (bldr, file) -> {
                     bldr.putString(file.getName());
-                    try{
+                    try {
                         final byte[] bytes = Files.readAllBytes(file.toPath());
                         bldr.putBoolean(true);
                         bldr.putBytes(bytes);
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         bldr.putBoolean(false);
                     }
                 },
                 (Decoder<File>) buf -> {
                     final String full = buf.getString();
-                    if(!buf.getBoolean())
+                    if (!buf.getBoolean())
                         return null;
                     final int i = full.lastIndexOf('.');
                     final String name = full.substring(0, i);
-                    final String extension = full.substring(i+1);
-                    try{
-                       final File file = File.createTempFile(name, extension);
-                       Files.write(file.toPath(), buf.getBytes());
+                    final String extension = full.substring(i + 1);
+                    try {
+                        final File file = File.createTempFile(name, extension);
+                        Files.write(file.toPath(), buf.getBytes());
                         return file;
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         return null;
                     }
                 }
         );
-        add(Data.class,
+        addCodec(Data.class,
                 (Encoder<Data>) (bldr, data) -> {
                     bldr.putShort(data.opcode);
                     bldr.putInt(data.entryCount());
@@ -165,11 +162,11 @@ public final class Core {
 
     private Core(){}
 
-    public static <T> void add(final Class<T> clazz, final Encoder<T> encoder, final Decoder<T> decoder){
-        add(clazz.getName(), encoder, decoder);
+    public static <T> void addCodec(final Class<T> clazz, final Encoder<T> encoder, final Decoder<T> decoder){
+        addCodec(clazz.getName(), encoder, decoder);
     }
 
-    public static <T> void add(final String name, final Encoder<T> encoder, final Decoder<T> decoder){
+    public static <T> void addCodec(final String name, final Encoder<T> encoder, final Decoder<T> decoder){
         ENCODERS.put(name, encoder);
         DECODERS.put(name, decoder);
     }
