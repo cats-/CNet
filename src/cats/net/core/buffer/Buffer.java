@@ -38,7 +38,7 @@ public final class Buffer{
         final int length = getInt();
         final StringBuilder builder = new StringBuilder(length);
         for(int i = 0; i < length; i++)
-            builder.append(getChar());
+            builder.append((char)getByte());
         return builder.toString();
     }
 

@@ -32,7 +32,7 @@ public final class BufferBuilder {
     public BufferBuilder putString(final String string){
         putInt(string.length());
         for(final char c : string.toCharArray())
-            putChar(c);
+            putByte((byte)c);
         return this;
     }
 
