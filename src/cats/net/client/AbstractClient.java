@@ -97,4 +97,13 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
             return false;
         }
     }
+
+    public boolean reconnect(){
+        try{
+            connect();
+        }catch(Exception ex){
+            CoreUtils.print(ex);
+        }
+        return isConnected();
+    }
 }
