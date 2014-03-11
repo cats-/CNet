@@ -99,6 +99,8 @@ public abstract class AbstractClient extends AbstractConnectionSpot<AbstractClie
     }
 
     public boolean reconnect(){
+        if(isConnected())
+            return true;
         try{
             connect();
         }catch(Exception ex){
